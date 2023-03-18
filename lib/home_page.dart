@@ -1,0 +1,753 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/production_record_model_class.dart';
+import 'package:poss/const_page.dart';
+import 'package:poss/drawer_section/mydrawersection.dart';
+import 'package:poss/pages/account_pages/bank_transaction_page.dart';
+import 'package:poss/pages/account_pages/bank_transaction_report_page.dart';
+import 'package:poss/pages/account_pages/cash_statement_page.dart';
+import 'package:poss/pages/account_pages/cash_transaction.dart';
+import 'package:poss/pages/account_pages/cash_transaction_report_page.dart';
+import 'package:poss/pages/account_pages/cash_view_page.dart';
+import 'package:poss/pages/account_pages/customer_pay_reciev_page.dart';
+import 'package:poss/pages/account_pages/supplier_payment_page.dart';
+import 'package:poss/pages/administration_pages/customer_entry_page.dart';
+import 'package:poss/pages/administration_pages/product_entry_page.dart';
+import 'package:poss/pages/administration_pages/product_ledger_page.dart';
+import 'package:poss/pages/administration_pages/supplier_entry_page.dart';
+import 'package:poss/pages/production_pages/meterial_purchase_page.dart';
+import 'package:poss/pages/production_pages/meterial_purchase_record.dart';
+import 'package:poss/pages/production_pages/production_entry_page.dart';
+import 'package:poss/pages/production_pages/production_record_page.dart';
+import 'package:poss/pages/purchase_module/purchase_entry/purchase_entry.dart';
+import 'package:poss/pages/purchase_module/purchase_record.dart';
+import 'package:poss/pages/purchase_module/supplier_due_report.dart';
+import 'package:poss/pages/report_module/profit&loss_report_page.dart';
+import 'package:poss/pages/sales_module/customer_due_list.dart';
+import 'package:poss/pages/sales_module/customer_list.dart';
+import 'package:poss/pages/sales_module/customer_payment_history.dart';
+import 'package:poss/pages/sales_module/customer_payment_report.dart';
+import 'package:poss/pages/sales_module/sales_entry/sales_entry.dart';
+import 'package:poss/pages/sales_module/sales_record.dart';
+import 'package:poss/pages/sales_module/stock_report.dart';
+
+class HomePage extends StatefulWidget {
+  HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // static GetApiData(context) async {
+  //   List<ProductionRecordModelClass> allProductionRecordlist = [];
+  //   ProductionRecordModelClass productionRecordModelClass;
+  //   try {
+  //     var Response = await http.post(
+  //         Uri.parse("http://testapi.happykhata.com/api/v1/getProductionRecord"),
+  //         headers: {
+  //           "Authorization": "Bearer ${GetStorage().read("token")}",
+  //         },
+  //         body: {});
+  //     print("=========ddddddddddddddddddddddddd==========:::${Response.body}");
+
+  //     // if (Response.statusCode == 200) {
+  //     //   var data = jsonDecode(Response.body);
+  //     //   print("=====aaaaapppppiiii====dada : ${data}");
+  //     //   for (var i in data) {
+  //     //     productionRecordModelClass = ProductionRecordModelClass.fromJson(i);
+  //     //     allProductionRecordlist.add(productionRecordModelClass);
+  //     //   }
+  //     // }
+  //   } catch (e) {
+  //     print("Something is errror:$e");
+  //   }
+  //   return allProductionRecordlist;
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: MyDrawerSection(),
+      appBar: AppBar(
+        elevation: 2.0,
+        backgroundColor: Color.fromARGB(255, 7, 125, 180),
+        title: Text(
+          "POS EXPRESS",
+          style: TextStyle(
+              fontSize: 22.0, fontWeight: FontWeight.w800, color: Colors.white),
+        ),
+        actions: [
+          Column(
+            children: [
+              CircleAvatar(
+                radius: 20.0,
+                backgroundImage: NetworkImage(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw8tnmRAobUlTWwXTzG0yJevfymCAQw00wZw&usqp=CAU'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Text(
+                  "Welcome,Admin",
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: Color.fromARGB(255, 7, 125, 180),
+              height: 100.0,
+              width: double.infinity,
+              padding:
+                  EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
+              child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(horizontal: 3.0),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      mainAxisExtent: 70,
+                      mainAxisSpacing: 7,
+                      crossAxisSpacing: 7,
+                    ),
+                    itemCount: headTitle.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        height: 50.0,
+                        width: 80,
+                        margin: EdgeInsets.only(
+                          right: 4,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FittedBox(
+                              child: Text(
+                                "${headTitle[index]['name']}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 7, 125, 180),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              "105k",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.robotoSlab(
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 253, 253, 253),
+                            borderRadius: BorderRadius.circular(5.0)),
+                      );
+                    },
+                  )),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                left: 10,
+                right: 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Sales",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              decoration: TextDecoration.underline,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    height: 230,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: salesList.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisExtent: 110,
+                        ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => salesPages[index],
+                                  ));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue[50],
+                              elevation: 9.00,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "${salesList[index]['image']}"),
+                                    height: 40,
+                                    width: 45,
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    "${salesList[index]['name']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      // color: Color.fromARGB(255, 7, 125, 180),
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                left: 15,
+                right: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    child: Text(
+                      "Purchase",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.underline,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    height: 230,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: purchaseList.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisExtent: 110,
+                        ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => purchasepage[index],
+                                  ));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue[50],
+                              elevation: 9.00,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "${purchaseList[index]['image']}"),
+                                    height: 40,
+                                    width: 45,
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    "${purchaseList[index]['name']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      // color: Color.fromARGB(255, 7, 125, 180),
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                left: 15,
+                right: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    child: Text(
+                      "Production",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.underline,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    height: 130,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: ProductionList.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisExtent: 110,
+                        ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        _ProductionListPages[index],
+                                  ));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue[50],
+                              elevation: 9.00,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "${ProductionList[index]['image']}"),
+                                    height: 40,
+                                    width: 45,
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    "${ProductionList[index]['name']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      // color: Color.fromARGB(255, 7, 125, 180),
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                left: 15,
+                right: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    child: Text(
+                      "Account",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.underline,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    height: 230,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: accountList.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisExtent: 110,
+                        ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        accountListPage[index],
+                                  ));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue[50],
+                              elevation: 9.00,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "${accountList[index]['image']}"),
+                                    height: 40,
+                                    width: 45,
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    "${accountList[index]['name']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      // color: Color.fromARGB(255, 7, 125, 180),
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                left: 15,
+                right: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 150,
+                    child: Text(
+                      "Administatior",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.underline,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    height: 130,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: Administator.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisExtent: 110,
+                        ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        _administatorPages[index],
+                                  ));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue[50],
+                              elevation: 9.00,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "${Administator[index]['image']}"),
+                                    height: 40,
+                                    width: 45,
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    "${Administator[index]['name']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      // color: Color.fromARGB(255, 7, 125, 180),
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                left: 15,
+                right: 15,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 150,
+                    child: Text(
+                      "Report Module",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          decoration: TextDecoration.underline,
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    height: 130,
+                    width: MediaQuery.of(context).size.width,
+                    child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: 1,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisExtent: 110,
+                        ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        _reportModulePage[index],
+                                  ));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue[50],
+                              elevation: 9.00,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "${reportModule[index]['image']}"),
+                                    height: 40,
+                                    width: 45,
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Text(
+                                    "${reportModule[index]['name']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      // color: Color.fromARGB(255, 7, 125, 180),
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  TextStyle textStyle() {
+    return TextStyle(
+        color: Colors.white, fontSize: 17, fontWeight: FontWeight.w900);
+  }
+
+  List salesList = [
+    {"name": "Sales Entry", "image": "all_picture/sales_entry.png"},
+    {"name": "Sales Record", "image": "all_picture/sales_record.png"},
+    {"name": "Stock", "image": "all_picture/stock.png"},
+    {"name": "Due List", "image": "all_picture/due_list.png"},
+    {"name": "Customer Payment Report", "image": "all_picture/cpr.png"},
+    {"name": "Customer Payment History", "image": "all_picture/cph.png"},
+    {"name": "Customer List", "image": "all_picture/custlist.png"},
+  ];
+
+  List purchaseList = [
+    {"name": "Purchase Entry", "image": "all_picture/purchase_entry.png"},
+    {"name": "Purchase Record", "image": "all_picture/purcashe_record.png"},
+    {"name": "Supplier due report", "image": "all_picture/sdr.png"},
+    {"name": "Supplier payment report", "image": "all_picture/spr.png"},
+    {"name": "ReOrder list", "image": "all_picture/rol.png"},
+  ];
+  //
+  List ProductionList = [
+    {"name": "Production Entry", "image": "all_picture/production_entry.png"},
+    {"name": "Production Record", "image": "all_picture/production_record.png"},
+    {"name": "Material purchase", "image": "all_picture/mp.png"},
+    {"name": "Material purchase Record", "image": "all_picture/mpr.png"},
+  ];
+  List _ProductionListPages = [
+    ProductionEntryPage(),
+    ProductionRecordPage(),
+    MeterialPurchasePage(),
+    MeterialPurchaseRecord(),
+  ];
+  //
+//account
+  List accountList = [
+    {"name": "Cash Transaction", "image": "all_picture/cashtrans.png"},
+    {"name": "Bank Transaction", "image": "all_picture/btrans.png"},
+    {"name": "Customer Payment", "image": "all_picture/custpay.png"},
+    {"name": "Supplier Payment", "image": "all_picture/spr.png"},
+    {"name": "Cash View", "image": "all_picture/cashview.png"},
+    {
+      "name": "Cash Transaction Report",
+      "image": "all_picture/cashtransrep.png"
+    },
+    {"name": "Bank Transaction Report", "image": "all_picture/btr.png"},
+    {"name": "Cash Statement", "image": "all_picture/cashstate.png"},
+  ];
+  List accountListPage = [
+    CashTransactionPage(),
+    BankTransactionPage(),
+    CustomerPayRecivePage(),
+    SupplierPaymentPage(),
+    CashViewPage(),
+    CashTransactionReportPage(),
+    BankTransactionReportPage(),
+    CashStatementPage(),
+  ];
+  //
+
+//
+  List Administator = [
+    {"name": "Product Entry", "image": "all_picture/production_entry.png"},
+    {"name": "Product Ledger", "image": "all_picture/production_record.png"},
+    {"name": "Customer Entry", "image": "all_picture/customer_entry.png"},
+    {"name": "Supplier Entry", "image": "all_picture/suppay.png"},
+  ];
+  List _administatorPages = [
+    ProductEntryPage(),
+    ProductLedgerPage(),
+    CustomerEntryPage2(),
+    SupplierEntryPage(),
+  ];
+//
+  List headTitle = [
+    {"name": "Today Sale", "countPrice": "40k"},
+    {"name": "Monthly", "countPrice": "500k"},
+    {"name": "Total Due", "countPrice": "80k"},
+    {"name": "Cash", "countPrice": "150k"},
+  ];
+
+  List salesPages = [
+    SalesEntryPage(),
+    SalesRecordPage(),
+    StockReportPage(),
+    Customer_Due_List(),
+    Customer_Payment_Report(),
+    Customer_Payment_History(),
+    Customer_List(),
+  ];
+  List purchasepage = [
+    PurchaseEntryPage(),
+    PurchaseRecord(),
+    SupplierDueReport(),
+  ];
+  //Report Module
+  //
+  List reportModule = [
+    {"name": "Profit & Loss", "image": "all_picture/paal.png"},
+  ];
+  List _reportModulePage = [
+    ProfitLossReportPage(),
+  ];
+//
+}
