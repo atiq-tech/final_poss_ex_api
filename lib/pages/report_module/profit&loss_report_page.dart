@@ -3,7 +3,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
+import 'package:poss/Api_Integration/Api_all_profit&loss/Api_all_profit_&_loss.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProfitLossReportPage extends StatefulWidget {
   const ProfitLossReportPage({super.key});
@@ -51,25 +55,50 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     'Payment',
   ];
   String? _selectedAccount;
-  List<String> _selectedAccountList = [
-    'Auto Vara',
-    'Capital',
-    'Transport bill',
-    'Sallary',
-    'Discount',
-    'Withdraw',
-    'Van Survice',
-    'Machine Survice',
-    'Factory Rent',
-    'Purchase',
-    'Truck Vara',
-    'Mobile Recharge',
-    'Production bill',
-    'Interest',
-    'Instolment',
-  ];
+  // List<String> _selectedAccountList = [
+  //   'Auto Vara',
+  //   'Capital',
+  //   'Transport bill',
+  //   'Sallary',
+  //   'Discount',
+  //   'Withdraw',
+  //   'Van Survice',
+  //   'Machine Survice',
+  //   'Factory Rent',
+  //   'Purchase',
+  //   'Truck Vara',
+  //   'Mobile Recharge',
+  //   'Production bill',
+  //   'Interest',
+  //   'Instolment',
+  // ];
+  ApiAllCustomers? apiAllCustomers;
+  ApiAllProfitLoss? apiAllProfitLoss;
+  @override
+  void initState() {
+    //Customers
+    ApiAllCustomers apiAllCustomers;
+    Provider.of<CounterProvider>(context, listen: false).getCustomers(context);
+    // Profit & Loss
+    ApiAllProfitLoss apiAllProfitLoss;
+    Provider.of<CounterProvider>(context, listen: false).getProfitLoss(context);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //Customers
+    final allCustomersData =
+        Provider.of<CounterProvider>(context).allCustomerslist;
+    print(
+        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=Lenght is:::::${allCustomersData.length}");
+    //
+    //Profit^& LOSS
+    final allProfitLossData =
+        Provider.of<CounterProvider>(context).allProfitLosslist;
+    print(
+        "plplplplplplplplpplpplplplp=Lenght is:::::${allProfitLossData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Profit & Loss"),
       body: SingleChildScrollView(
@@ -114,6 +143,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
+                                isExpanded: true,
                                 hint: Text(
                                   'Select account',
                                   style: TextStyle(
@@ -125,18 +155,18 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                                 value: _selectedAccount,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _selectedAccount = newValue!;
+                                    _selectedAccount = newValue.toString();
                                   });
                                 },
-                                items: _selectedAccountList.map((location) {
+                                items: allCustomersData.map((location) {
                                   return DropdownMenuItem(
                                     child: Text(
-                                      location,
+                                      "${location.customerName}",
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
                                     ),
-                                    value: location,
+                                    value: location.customerSlNo,
                                   );
                                 }).toList(),
                               ),

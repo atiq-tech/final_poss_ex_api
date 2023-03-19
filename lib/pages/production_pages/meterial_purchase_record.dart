@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:poss/Api_Integration/Api_All_get_production_record/production_record_api.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/production_record_model_class.dart';
+import 'package:poss/Api_Integration/Api_all_get_suppliers/get_suppliers_api.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:poss/const_page.dart';
@@ -53,7 +54,7 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
     }
   }
 
-  bool isBankListClicked = false;
+  bool isSupplierListClicked = false;
   String? _searchType;
 
   List<String> _searchTypeList = [
@@ -61,49 +62,24 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
     'By Supplier',
   ];
   String? _selectedSupplier;
-  List<String> _selectedSupplierList = [
-    'C0010-Noyon',
-    'A02-Sbir Enterprise',
-    'A02-Manionj Traders',
-    'A02-Tanvir Enterprise',
-    'A02-Hanif Enterprise',
-    'A02-Hanan Stap',
-    'A02-Sabir Enterprise',
-  ];
-
-  // static GetApiData(context) async {
-  //   String Link = "${BaseUrl}api/v1/getProductionRecord";
-  //   List<ProductionRecordModelClass> allProductionRecordlist = [];
-  //   ProductionRecordModelClass productionRecordModelClass;
-  //   try {
-  //     var Response = await http.post(
-  //         Uri.parse("http://testapi.happykhata.com/api/v1/getProductionRecord"),
-  //         headers: {
-  //           "Authorization": "Bearer ${GetStorage().read("token")}",
-  //         },
-  //         body: {});
-  //     print("=========ddddddddddddddddddddddddd==========:::${Response.body}");
-  //     print("ggggggggggggggggggggggggggggggggggggggg");
-
-  //     if (Response.statusCode == 200) {
-  //       var data = jsonDecode(Response.body);
-  //       print("this is=====aaaaapppppiiii====dada : ${data}");
-  //       for (var i in data) {
-  //         productionRecordModelClass = ProductionRecordModelClass.fromJson(i);
-  //         allProductionRecordlist.add(productionRecordModelClass);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print("Something is errror:$e");
-  //   }
-  //   return allProductionRecordlist;
-  // }
-  ApiallProductionRecord? apiallProductionRecord;
+  // List<String> _selectedSupplierList = [
+  //   'C0010-Noyon',
+  //   'A0000000002-Sbir Enterprise',
+  //   'A02220000222-Manionj Traders',
+  //   'A02-Tanvir Enterprise',
+  //   'A4500000000002-Hanif Enterprise',
+  //   'A02-Hanan Stap',
+  //   'A02-Sabir Enterprise',
+  // ];
+  GetSuppliersApi? getSuppliersApi;
+  //ApiallProductionRecord? apiallProductionRecord;
   @override
   void initState() {
-    ApiallProductionRecord? apiallProductionRecord;
-    Provider.of<CounterProvider>(context, listen: false)
-        .getProductRecord(context);
+    GetSuppliersApi getSuppliersApi;
+    Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
+    // ApiallProductionRecord? apiallProductionRecord;
+    // Provider.of<CounterProvider>(context, listen: false)
+    //     .getProductRecord(context);
 
     // TODO: implement initState
     super.initState();
@@ -111,9 +87,14 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
 
   @override
   Widget build(BuildContext context) {
+    // Get Suppliers
+    final allGetSuppliersData =
+        Provider.of<CounterProvider>(context).getSupplierlist;
     //All ProductRecord
-    final allProductionRecordData =
-        Provider.of<CounterProvider>(context).allProductionRecordlist;
+    // final allProductionRecordData =
+    //     Provider.of<CounterProvider>(context).allProductionRecordlist;
+    print(
+        "ssssssssssssssssssssssssssssssssssssss${allGetSuppliersData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Meterial Purchase Record"),
       body: Container(
@@ -172,13 +153,14 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
                                     setState(() {
                                       _searchType = newValue!;
                                       _searchType == "By Supplier"
-                                          ? isBankListClicked = true
-                                          : isBankListClicked = false;
+                                          ? isSupplierListClicked = true
+                                          : isSupplierListClicked = false;
                                     });
                                   },
                                   items: _searchTypeList.map((location) {
                                     return DropdownMenuItem(
                                       child: Text(
+                                        maxLines: 1,
                                         location,
                                         style: TextStyle(
                                           fontSize: 14,
@@ -195,7 +177,7 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
                       ),
                     ),
                     SizedBox(height: 6.0),
-                    isBankListClicked == true
+                    isSupplierListClicked == true
                         ? Container(
                             child: Row(
                               children: [
@@ -224,6 +206,7 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
                                     ),
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton(
+                                        isExpanded: true,
                                         hint: Text(
                                           'Select Supplier',
                                           style: TextStyle(
@@ -238,19 +221,22 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
                                         value: _selectedSupplier,
                                         onChanged: (newValue) {
                                           setState(() {
-                                            _selectedSupplier = newValue!;
+                                            _selectedSupplier =
+                                                newValue.toString();
                                           });
                                         },
-                                        items: _selectedSupplierList
-                                            .map((location) {
+                                        items:
+                                            allGetSuppliersData.map((location) {
                                           return DropdownMenuItem(
                                             child: Text(
-                                              location,
+                                              overflow: TextOverflow.visible,
+                                              maxLines: 1,
+                                              "${location.supplierName}",
                                               style: TextStyle(
                                                 fontSize: 14,
                                               ),
                                             ),
-                                            value: location,
+                                            value: location.supplierSlNo,
                                           );
                                         }).toList(),
                                       ),
