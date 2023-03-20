@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/salse_record_model_class.dart';
 import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
 import 'package:poss/Api_Integration/Api_all_profit&loss/Api_all_profit_&_loss.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
@@ -29,7 +30,8 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+        // firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
       });
     }
   }
@@ -44,7 +46,8 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+        //secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
       });
     }
   }
@@ -55,37 +58,22 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     'Payment',
   ];
   String? _selectedAccount;
-  // List<String> _selectedAccountList = [
-  //   'Auto Vara',
-  //   'Capital',
-  //   'Transport bill',
-  //   'Sallary',
-  //   'Discount',
-  //   'Withdraw',
-  //   'Van Survice',
-  //   'Machine Survice',
-  //   'Factory Rent',
-  //   'Purchase',
-  //   'Truck Vara',
-  //   'Mobile Recharge',
-  //   'Production bill',
-  //   'Interest',
-  //   'Instolment',
-  // ];
+
   ApiAllCustomers? apiAllCustomers;
   ApiAllProfitLoss? apiAllProfitLoss;
   @override
   void initState() {
     //Customers
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     ApiAllCustomers apiAllCustomers;
     Provider.of<CounterProvider>(context, listen: false).getCustomers(context);
-    // Profit & Loss
-    ApiAllProfitLoss apiAllProfitLoss;
-    Provider.of<CounterProvider>(context, listen: false).getProfitLoss(context);
+
     // TODO: implement initState
     super.initState();
   }
 
+  final List selesDetailslist = [];
   @override
   Widget build(BuildContext context) {
     //Customers
@@ -156,6 +144,11 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     _selectedAccount = newValue.toString();
+                                    print(
+                                        "Customer Si no ===========>: $newValue");
+                                    // Profit & Loss
+
+                                    //
                                   });
                                 },
                                 items: allCustomersData.map((location) {
@@ -206,8 +199,8 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: firstPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : firstPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -247,8 +240,8 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: secondPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : secondPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -269,7 +262,35 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                     Align(
                       alignment: Alignment.bottomRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            Provider.of<CounterProvider>(context, listen: false)
+                                .getProfitLoss(
+                                    context,
+                                    "${_selectedAccount}",
+                                    "${firstPickedDate}",
+                                    "${secondPickedDate}");
+
+                            print("firstDate ++++++=====::${firstPickedDate}");
+                            print(
+                                "secondPickedDate ++++++=====::${secondPickedDate}");
+
+                            for (int i = 0;
+                                i <= allProfitLossData.length;
+                                i++) {
+                              for (int k = 0;
+                                  k < allProfitLossData[i].saleDetails!.length;
+                                  k++) {
+                                selesDetailslist
+                                    .add(allProfitLossData[i].saleDetails![k]);
+                                print(
+                                    "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh${selesDetailslist[k].productName}");
+                              }
+                              print(
+                                  "ddddddddddddddddddddddddddddddddddddddddddd${allProfitLossData[i].saleDetails![0].productName}");
+                            }
+                          });
+                        },
                         child: Container(
                           height: 35.0,
                           width: 85.0,
@@ -338,29 +359,44 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                           ),
                         ],
                         rows: List.generate(
-                          30,
+                          //allProfitLossData.length,
+                          allProfitLossData[0].saleDetails!.length,
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].saleDetails![index].productName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].customerName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].customerName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].customerName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].customerName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].customerName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].customerName}')),
                               )
                             ],
                           ),

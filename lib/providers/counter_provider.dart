@@ -9,20 +9,20 @@ import 'package:poss/Api_Integration/Api_all_get_suppliers/get_suppliers_api.dar
 import 'package:poss/Api_Integration/Api_all_profit&loss/Api_all_profit_&_loss.dart';
 
 class CounterProvider extends ChangeNotifier {
-  //production record
-  List<ProductionRecordModelClass> allProductionRecordlist = [];
-  getProductRecord(BuildContext context) async {
-    allProductionRecordlist =
-        await ApiallProductionRecord.GetApiProductionRecord(context);
-    notifyListeners();
-  }
+  // //production record
+  // List<ProductionRecordModelClass> allProductionRecordlist = [];
+  // getProductRecord(BuildContext context) async {
+  //   allProductionRecordlist =
+  //       await ApiallProductionRecord.GetApiProductionRecord(context);
+  //   notifyListeners();
+  // }
 
-  //Get Suppliers
-  List<GetSupplierClass> getSupplierlist = [];
-  getSupplier(BuildContext context) async {
-    getSupplierlist = await GetSuppliersApi.GetApiGetSupplier(context);
-    notifyListeners();
-  }
+  // //Get Suppliers
+  // List<GetSupplierClass> getSupplierlist = [];
+  // getSupplier(BuildContext context) async {
+  //   getSupplierlist = await GetSuppliersApi.GetApiGetSupplier(context);
+  //   notifyListeners();
+  // }
 
   //Customers
   List<AllCustomersClass> allCustomerslist = [];
@@ -30,10 +30,11 @@ class CounterProvider extends ChangeNotifier {
     allCustomerslist = await ApiAllCustomers.GetApiAllCustomers(context);
     notifyListeners();
   }
-    //Profit & Loss
+
+  //Profit & Loss
   List<AllProfitLossClass> allProfitLosslist = [];
-  getProfitLoss(BuildContext context) async {
-    allProfitLosslist = await ApiAllProfitLoss.GetApiAllProfitLoss(context);
+  getProfitLoss(context,String ?customer ,String ?dateFrom,String ?dateTo) async {
+    allProfitLosslist = await ApiAllProfitLoss.GetApiAllProfitLoss(context,customer ,  dateFrom, dateTo);
     notifyListeners();
   }
 }

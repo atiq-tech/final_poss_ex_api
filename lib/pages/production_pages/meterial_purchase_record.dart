@@ -71,12 +71,12 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
   //   'A02-Hanan Stap',
   //   'A02-Sabir Enterprise',
   // ];
-  GetSuppliersApi? getSuppliersApi;
+  //GetSuppliersApi? getSuppliersApi;
   //ApiallProductionRecord? apiallProductionRecord;
   @override
   void initState() {
-    GetSuppliersApi getSuppliersApi;
-    Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
+    // GetSuppliersApi getSuppliersApi;
+    // Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
     // ApiallProductionRecord? apiallProductionRecord;
     // Provider.of<CounterProvider>(context, listen: false)
     //     .getProductRecord(context);
@@ -87,14 +87,14 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
 
   @override
   Widget build(BuildContext context) {
-    // Get Suppliers
-    final allGetSuppliersData =
-        Provider.of<CounterProvider>(context).getSupplierlist;
+    // // Get Suppliers
+    // final allGetSuppliersData =
+    //     Provider.of<CounterProvider>(context).getSupplierlist;
     //All ProductRecord
     // final allProductionRecordData =
     //     Provider.of<CounterProvider>(context).allProductionRecordlist;
-    print(
-        "ssssssssssssssssssssssssssssssssssssss${allGetSuppliersData.length}");
+    // print(
+    //     "ssssssssssssssssssssssssssssssssssssss${allGetSuppliersData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Meterial Purchase Record"),
       body: Container(
@@ -191,58 +191,60 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
                                   ),
                                 ),
                                 Expanded(flex: 1, child: Text(":")),
-                                Expanded(
-                                  flex: 11,
-                                  child: Container(
-                                    height: 30.0,
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Color.fromARGB(255, 5, 107, 155),
-                                      ),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Select Supplier',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        dropdownColor: Color.fromARGB(
-                                            255,
-                                            231,
-                                            251,
-                                            255), // Not necessary for Option 1
-                                        value: _selectedSupplier,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            _selectedSupplier =
-                                                newValue.toString();
-                                          });
-                                        },
-                                        items:
-                                            allGetSuppliersData.map((location) {
-                                          return DropdownMenuItem(
-                                            child: Text(
-                                              overflow: TextOverflow.visible,
-                                              maxLines: 1,
-                                              "${location.supplierName}",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            value: location.supplierSlNo,
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+
+                                // Expanded(
+                                //   flex: 11,
+                                //   child: Container(
+                                //     height: 30.0,
+                                //     width:
+                                //         MediaQuery.of(context).size.width / 2,
+                                //     padding: EdgeInsets.only(left: 5.0),
+                                //     decoration: BoxDecoration(
+                                //       border: Border.all(
+                                //         color: Color.fromARGB(255, 5, 107, 155),
+                                //       ),
+                                //       borderRadius: BorderRadius.circular(10.0),
+                                //     ),
+                                //     child: DropdownButtonHideUnderline(
+                                //       child: DropdownButton(
+                                //         isExpanded: true,
+                                //         hint: Text(
+                                //           'Select Supplier',
+                                //           style: TextStyle(
+                                //             fontSize: 14,
+                                //           ),
+                                //         ),
+                                //         dropdownColor: Color.fromARGB(
+                                //             255,
+                                //             231,
+                                //             251,
+                                //             255), // Not necessary for Option 1
+                                //         value: _selectedSupplier,
+                                //         onChanged: (newValue) {
+                                //           setState(() {
+                                //             _selectedSupplier =
+                                //                 newValue.toString();
+                                //           });
+                                //         },
+                                //         items:
+                                //             allGetSuppliersData.map((location) {
+                                //           return DropdownMenuItem(
+                                //             child: Text(
+                                //               overflow: TextOverflow.visible,
+                                //               maxLines: 1,
+                                //               "${location.supplierName}",
+                                //               style: TextStyle(
+                                //                 fontSize: 14,
+                                //               ),
+                                //             ),
+                                //             value: location.supplierSlNo,
+                                //           );
+                                //         }).toList(),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                             
                               ],
                             ),
                           )
