@@ -23,7 +23,7 @@ class AllProductsClass {
   String? productBranchid;
   String? displayText;
   String? productCategoryName;
-  String? brandName;
+  Null? brandName;
   String? unitName;
 
   AllProductsClass(

@@ -7,7 +7,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_product_ledger/api_all_product_ledger.dart';
+import 'package:poss/Api_Integration/Api_all_products/api_all_products.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductLedgerPage extends StatefulWidget {
   const ProductLedgerPage({super.key});
@@ -29,7 +33,7 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -44,7 +48,7 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -55,25 +59,34 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
     'Payment',
   ];
   String? _selectedAccount;
-  List<String> _selectedAccountList = [
-    'Auto Vara',
-    'Capital',
-    'Transport bill',
-    'Sallary',
-    'Discount',
-    'Withdraw',
-    'Van Survice',
-    'Machine Survice',
-    'Factory Rent',
-    'Purchase',
-    'Truck Vara',
-    'Mobile Recharge',
-    'Production bill',
-    'Interest',
-    'Instolment',
-  ];
+
+  ApiAllProducts? apiAllProducts;
+  ApiAllProductLedger? apiAllProductLedger;
+  @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    //Products
+    ApiAllProducts apiAllProducts;
+    Provider.of<CounterProvider>(context, listen: false).getProducts(context);
+
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //Products
+    final allProductsData =
+        Provider.of<CounterProvider>(context).allProductslist;
+    print(
+        "Product===Product===Product===Product===Lenght is:::::${allProductsData.length}");
+    //
+    //Product Ledger
+    final allProductLedgerData =
+        Provider.of<CounterProvider>(context).allProductLedgerlist;
+    print(
+        "ProductLedgeer===ProductLedger===ProductLedger=Lenght is:::::${allProductLedgerData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Product Ledger"),
       body: SingleChildScrollView(
@@ -117,6 +130,7 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
+                                isExpanded: true,
                                 hint: Text(
                                   'Select Product',
                                   style: TextStyle(
@@ -128,18 +142,18 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                                 value: _selectedAccount,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _selectedAccount = newValue!;
+                                    _selectedAccount = newValue!.toString();
                                   });
                                 },
-                                items: _selectedAccountList.map((location) {
+                                items: allProductsData.map((location) {
                                   return DropdownMenuItem(
                                     child: Text(
-                                      location,
+                                      "${location.productName}",
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
                                     ),
-                                    value: location,
+                                    value: location.productSlNo,
                                   );
                                 }).toList(),
                               ),
@@ -149,7 +163,6 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                       ],
                     ),
                     SizedBox(height: 10.0),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -158,6 +171,7 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                           style: TextStyle(
                               color: Color.fromARGB(255, 126, 125, 125)),
                         ),
+
                         Expanded(
                           flex: 1,
                           child: Container(
@@ -180,8 +194,8 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: firstPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : firstPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -196,9 +210,11 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                             ),
                           ),
                         ),
+                        
                         Container(
                           child: Text("to"),
                         ),
+                        
                         Expanded(
                           flex: 1,
                           child: Container(
@@ -221,8 +237,8 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: secondPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : secondPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -237,14 +253,28 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                             ),
                           ),
                         ),
+                      
                       ],
                     ),
-                  
-                   SizedBox(height: 10.0),
+                    SizedBox(height: 10.0),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            Provider.of<CounterProvider>(context, listen: false)
+                                .getProductLedger(
+                                    context,
+                                    "${_selectedAccount}",
+                                    "${firstPickedDate}",
+                                    "${secondPickedDate}");
+
+                            print(
+                                "firstDate product ledger=====::${firstPickedDate}");
+                            print(
+                                "secondDate ++++++product ledger=====::${secondPickedDate}");
+                          });
+                        },
                         child: Container(
                           height: 35.0,
                           width: 75.0,
@@ -307,23 +337,33 @@ class _ProductLedgerPageState extends State<ProductLedgerPage> {
                           ),
                         ],
                         rows: List.generate(
-                          30,
+                          allProductLedgerData.length,
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProductLedgerData[index].date}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProductLedgerData[index].rate}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProductLedgerData[index].inQuantity}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProductLedgerData[index].outQuantity}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allProductLedgerData[index].stock}')),
                               ),
                             ],
                           ),

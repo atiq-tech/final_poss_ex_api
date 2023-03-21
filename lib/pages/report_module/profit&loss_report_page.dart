@@ -31,7 +31,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     if (selectedDate != null) {
       setState(() {
         firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-        // firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        
       });
     }
   }
@@ -47,7 +47,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     if (selectedDate != null) {
       setState(() {
         secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-        //secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        
       });
     }
   }
@@ -359,10 +359,15 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                           ),
                         ],
                         rows: List.generate(
-                          //allProfitLossData.length,
-                          allProfitLossData[0].saleDetails!.length,
+                          allProfitLossData.length,
+                          //allProfitLossData[0].saleDetails!.length,
                           (int index) => DataRow(
                             cells: <DataCell>[
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProfitLossData[0].saleDetails![index].productIDNo}')),
+                              ),
                               DataCell(
                                 Center(
                                     child: Text(
@@ -371,32 +376,27 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                               DataCell(
                                 Center(
                                     child: Text(
-                                        '${allProfitLossData[0].customerName}')),
+                                        '${allProfitLossData[0].saleDetails![index].saleDetailsTotalQuantity}')),
                               ),
                               DataCell(
                                 Center(
                                     child: Text(
-                                        '${allProfitLossData[0].customerName}')),
+                                        '${allProfitLossData[0].saleDetails![index].purchaseRate}')),
                               ),
                               DataCell(
                                 Center(
                                     child: Text(
-                                        '${allProfitLossData[0].customerName}')),
+                                        '${allProfitLossData[0].saleDetails![index].purchasedAmount}')),
                               ),
                               DataCell(
                                 Center(
                                     child: Text(
-                                        '${allProfitLossData[0].customerName}')),
+                                        '${allProfitLossData[0].saleDetails![index].saleDetailsTotalAmount}')),
                               ),
                               DataCell(
                                 Center(
                                     child: Text(
-                                        '${allProfitLossData[0].customerName}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].customerName}')),
+                                        '${allProfitLossData[0].saleDetails![index].profitLoss}')),
                               )
                             ],
                           ),

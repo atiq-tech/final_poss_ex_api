@@ -3,6 +3,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:intl/intl.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProductionRecordPage extends StatefulWidget {
   const ProductionRecordPage({super.key});
@@ -24,7 +27,7 @@ class _ProductionRecordPageState extends State<ProductionRecordPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -39,13 +42,26 @@ class _ProductionRecordPageState extends State<ProductionRecordPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
 
   @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //Product Ledger
+    final allProductionRecordData =
+        Provider.of<CounterProvider>(context).allProductionRecordlist;
+    print(
+        "ProductionRecord ISSSSSSSSSSSS IS Lenght is:::::${allProductionRecordData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Production Record"),
       body: SingleChildScrollView(
@@ -65,7 +81,6 @@ class _ProductionRecordPageState extends State<ProductionRecordPage> {
                 ),
                 child: Column(
                   children: [
-                    
                     Row(
                       children: [
                         Expanded(
@@ -79,56 +94,45 @@ class _ProductionRecordPageState extends State<ProductionRecordPage> {
                         Expanded(flex: 1, child: Text(":")),
                         Expanded(
                           flex: 11,
-                          child: GestureDetector(
-                            onTap: () async {
-                              final selectedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1950),
-                                  lastDate: DateTime(2050));
-                              if (selectedDate != null) {
-                                setState(() {
-                                  firstPickedDate = Jiffy(selectedDate)
-                                      .format("dd - MMM - yyyy");
-                                });
-                              }
-                            },
-                            child: Container(
-                              margin:
-                                  EdgeInsets.only(top: 5, right: 5, bottom: 5),
-                              height: 32,
-                              width: double.infinity,
-                              padding: EdgeInsets.only(
-                                  top: 5, bottom: 5, left: 5, right: 5),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 7, 125, 180),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    firstPickedDate == null
-                                        ? Jiffy(DateTime.now())
-                                            .format("dd - MMM - yyyy")
-                                        : firstPickedDate!,
-                                  ),
-                                  Icon(
+                          child: Container(
+                            height: 35,
+                            child: GestureDetector(
+                              onTap: (() {
+                                _firstSelectedDate();
+                              }),
+                              child: TextFormField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(top: 10, left: 5),
+                                  filled: true,
+                                  fillColor: Colors.blue[50],
+                                  suffixIcon: Icon(
                                     Icons.calendar_month,
-                                    size: 20,
-                                  )
-                                ],
+                                    color: Colors.black87,
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none),
+                                  hintText: firstPickedDate == null
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
+                                      : firstPickedDate,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.black87),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return null;
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 3.0),
+                    SizedBox(height: 6.0),
                     Row(
                       children: [
                         Expanded(
@@ -142,61 +146,62 @@ class _ProductionRecordPageState extends State<ProductionRecordPage> {
                         Expanded(flex: 1, child: Text(":")),
                         Expanded(
                           flex: 11,
-                          child: GestureDetector(
-                            onTap: () async {
-                              final selectedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(1950),
-                                  lastDate: DateTime(2050));
-                              if (selectedDate != null) {
-                                setState(() {
-                                  secondPickedDate = Jiffy(selectedDate)
-                                      .format("dd - MMM - yyyy");
-                                });
-                              }
-                            },
-                            child: Container(
-                              margin:
-                                  EdgeInsets.only(top: 5, right: 5, bottom: 5),
-                              height: 32,
-                              width: double.infinity,
-                              padding: EdgeInsets.only(
-                                  top: 5, bottom: 5, left: 5, right: 5),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 7, 125, 180),
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    secondPickedDate == null
-                                        ? Jiffy(DateTime.now())
-                                            .format("dd - MMM - yyyy")
-                                        : secondPickedDate!,
-                                  ),
-                                  Icon(
+                          child: Container(
+                            height: 35,
+                            child: GestureDetector(
+                              onTap: (() {
+                                _secondSelectedDate();
+                              }),
+                              child: TextFormField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(top: 10, left: 5),
+                                  filled: true,
+                                  fillColor: Colors.blue[50],
+                                  suffixIcon: Icon(
                                     Icons.calendar_month,
-                                    size: 20,
-                                  )
-                                ],
+                                    color: Colors.black87,
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none),
+                                  hintText: secondPickedDate == null
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
+                                      : secondPickedDate,
+                                  hintStyle: TextStyle(
+                                      fontSize: 14, color: Colors.black87),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return null;
+                                  }
+                                  return null;
+                                },
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                   
-                    SizedBox(height: 4),
+                    SizedBox(height: 8),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            Provider.of<CounterProvider>(context, listen: false)
+                                .getProductionRecord(
+                                    context,
+                                    "${firstPickedDate}",
+                                    "${secondPickedDate}");
+
+                            print(
+                                "firstDate ++++ProductionRecord=====::${firstPickedDate}");
+                            print(
+                                "secondDate ++++ProductionRecord=====::${secondPickedDate}");
+                          });
+                        },
                         child: Container(
                           height: 35.0,
                           width: 85.0,
@@ -221,7 +226,120 @@ class _ProductionRecordPageState extends State<ProductionRecordPage> {
                   ],
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              height: MediaQuery.of(context).size.height / 1.43,
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      // color: Colors.red,
+                      // padding:EdgeInsets.only(bottom: 16.0),
+                      child: DataTable(
+                        showCheckboxColumn: true,
+                        border:
+                            TableBorder.all(color: Colors.black54, width: 1),
+                        columns: [
+                          DataColumn(
+                            label: Center(child: Text('Production Id.')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Date')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Incharge')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Shift')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Total Cost')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Note')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Product Name')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Action')),
+                          ),
+                        ],
+                        rows: List.generate(
+                          allProductionRecordData.length,
+                          (int index) => DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[index].productionId}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[index].date}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[index].inchargeName}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[index].shift}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[index].totalCost}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[index].note}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[0].products![index].name}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allProductionRecordData[0].products![index].quantity}')),
+                              ),
+                              DataCell(
+                                Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.edit)),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.delete))
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
