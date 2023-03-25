@@ -90,7 +90,9 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
         "Meterial +++Purchase +++Record=Lenght is:::::${allMeterialPurchaseRecordData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Meterial Purchase Record"),
-      body: Container(
+      body: 
+      
+      Container(
         padding: EdgeInsets.all(6),
         child: SingleChildScrollView(
           child: Column(
@@ -386,7 +388,7 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
                   ],
                 ),
               ),
-              
+
               SizedBox(height: 10.0),
               Container(
                 height: MediaQuery.of(context).size.height / 1.43,
@@ -521,6 +523,7 @@ class _MeterialPurchaseRecordState extends State<MeterialPurchaseRecord> {
           ),
         ),
       ),
+   
     );
   }
 }

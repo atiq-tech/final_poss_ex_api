@@ -2,22 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:poss/Api_Integration/Api_Modelclass/salse_record_model_class.dart';
-import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
-import 'package:poss/Api_Integration/Api_all_profit&loss/Api_all_profit_&_loss.dart';
+import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
+import 'package:poss/Api_Integration/Api_all_supplier_payment_report/api_all_supplier_payment_report.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/providers/counter_provider.dart';
 import 'package:provider/provider.dart';
 
-class ProfitLossReportPage extends StatefulWidget {
-  const ProfitLossReportPage({super.key});
+class SupplierPaymentReport extends StatefulWidget {
+  const SupplierPaymentReport({super.key});
 
   @override
-  State<ProfitLossReportPage> createState() => _ProfitLossReportPageState();
+  State<SupplierPaymentReport> createState() => _SupplierPaymentReportState();
 }
 
-class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
+class _SupplierPaymentReportState extends State<SupplierPaymentReport> {
   final TextEditingController _DateController = TextEditingController();
   final TextEditingController _Date2Controller = TextEditingController();
   String? firstPickedDate;
@@ -31,7 +29,6 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     if (selectedDate != null) {
       setState(() {
         firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-        
       });
     }
   }
@@ -47,49 +44,36 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     if (selectedDate != null) {
       setState(() {
         secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-        
       });
     }
   }
 
-  String? _selectedType;
-  List<String> _selectedTypeList = [
-    'Received',
-    'Payment',
-  ];
-  String? _selectedAccount;
-
-  ApiAllCustomers? apiAllCustomers;
-  ApiAllProfitLoss? apiAllProfitLoss;
+  String? _selectedSupplier;
+  ApiAllSuppliers? apiAllSuppliers;
+  ApiAllSupplierPaymentReport? apiAllSupplierPaymentReport;
   @override
   void initState() {
-    //Customers
     firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    ApiAllCustomers apiAllCustomers;
-    Provider.of<CounterProvider>(context, listen: false).getCustomers(context);
-
+    ApiAllSuppliers apiAllSuppliers;
+    Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
     // TODO: implement initState
     super.initState();
   }
 
-  final List selesDetailslist = [];
   @override
   Widget build(BuildContext context) {
-    //Customers
-    final allCustomersData =
-        Provider.of<CounterProvider>(context).allCustomerslist;
+    // Suppliers
+    final allSuppliersData =
+        Provider.of<CounterProvider>(context).allSupplierslist;
+    print("ssssssssssssssssssssssssssssssssssssss  ${allSuppliersData.length}");
+    //Product Ledger
+    final allSupplierPaymentReportData =
+        Provider.of<CounterProvider>(context).allSupplierPaymentReportlist;
     print(
-        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=Lenght is:::::${allCustomersData.length}");
-    //
-    //Profit^& LOSS
-    final allProfitLossData =
-        Provider.of<CounterProvider>(context).allProfitLosslist;
-    print(
-        "plplplplplplplplpplpplplplp=Lenght is:::::${allProfitLossData.length}");
+        "SupplierPaymentReport===SupplierPaymentReport===SupplierPaymentReport=Lenght is:::::${allSupplierPaymentReportData.length}");
     return Scaffold(
-      appBar: CustomAppBar(title: "Profit & Loss"),
-      
+      appBar: CustomAppBar(title: "Supplier Payment Report"),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -112,7 +96,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                         Expanded(
                           flex: 3,
                           child: Text(
-                            "Customer",
+                            "Supplier",
                             style: TextStyle(
                                 color: Color.fromARGB(255, 126, 125, 125)),
                           ),
@@ -134,33 +118,33 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                               child: DropdownButton(
                                 isExpanded: true,
                                 hint: Text(
-                                  'Select account',
+                                  'Select Supplier',
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
                                 dropdownColor: Color.fromARGB(255, 231, 251,
                                     255), // Not necessary for Option 1
-                                value: _selectedAccount,
+                                value: _selectedSupplier,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _selectedAccount = newValue.toString();
+                                    _selectedSupplier = newValue.toString();
                                     print(
-                                        "Customer Si no ===========>: $newValue");
+                                        "Supplier Si no ===========>: $newValue");
                                     // Profit & Loss
 
                                     //
                                   });
                                 },
-                                items: allCustomersData.map((location) {
+                                items: allSuppliersData.map((location) {
                                   return DropdownMenuItem(
                                     child: Text(
-                                      "${location.customerName}",
+                                      "${location.supplierName}",
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
                                     ),
-                                    value: location.customerSlNo,
+                                    value: location.supplierSlNo,
                                   );
                                 }).toList(),
                               ),
@@ -266,35 +250,21 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                         onTap: () {
                           setState(() {
                             Provider.of<CounterProvider>(context, listen: false)
-                                .getProfitLoss(
+                                .getSupplierPaymentReport(
                                     context,
-                                    "${_selectedAccount}",
+                                    "${_selectedSupplier}",
                                     "${firstPickedDate}",
                                     "${secondPickedDate}");
 
-                            print("firstDate ++++++=====::${firstPickedDate}");
                             print(
-                                "secondPickedDate ++++++=====::${secondPickedDate}");
-
-                            for (int i = 0;
-                                i <= allProfitLossData.length;
-                                i++) {
-                              for (int k = 0;
-                                  k < allProfitLossData[i].saleDetails!.length;
-                                  k++) {
-                                selesDetailslist
-                                    .add(allProfitLossData[i].saleDetails![k]);
-                                print(
-                                    "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh${selesDetailslist[k].productName}");
-                              }
-                              print(
-                                  "ddddddddddddddddddddddddddddddddddddddddddd${allProfitLossData[i].saleDetails![0].productName}");
-                            }
+                                "SupplierPaymentReport firstDate ++++++=====::${firstPickedDate}");
+                            print(
+                                "SupplierPaymentReport secondPickedDate ++++++=====::${secondPickedDate}");
                           });
                         },
                         child: Container(
                           height: 35.0,
-                          width: 85.0,
+                          width: 80.0,
                           decoration: BoxDecoration(
                             border: Border.all(
                                 color: Color.fromARGB(255, 75, 196, 201),
@@ -304,7 +274,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                           ),
                           child: Center(
                               child: Text(
-                            "Search",
+                            "Show",
                             style: TextStyle(
                                 letterSpacing: 1.0,
                                 color: Colors.white,
@@ -317,101 +287,101 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10.0),
-            Container(
-              height: MediaQuery.of(context).size.height / 1.43,
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
-                      child: DataTable(
-                        showCheckboxColumn: true,
-                        border:
-                            TableBorder.all(color: Colors.black54, width: 1),
-                        columns: [
-                          DataColumn(
-                            label: Center(child: Text('Product Id')),
-                          ),
-                          DataColumn(
-                            label: Center(child: Text('Product')),
-                          ),
-                          DataColumn(
-                            label: Center(child: Text('Sold Quantity')),
-                          ),
-                          DataColumn(
-                            label: Center(child: Text('Purchase Rate')),
-                          ),
-                          DataColumn(
-                            label: Center(child: Text('Purchased Total')),
-                          ),
-                          DataColumn(
-                            label: Center(child: Text('Sold Amount')),
-                          ),
-                          DataColumn(
-                            label: Center(child: Text('Profit/Loss')),
-                          ),
-                        ],
-                        rows: List.generate(
-                          allProfitLossData.length,
-                          //allProfitLossData[0].saleDetails!.length,
-                          (int index) => DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].productIDNo}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].productName}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].saleDetailsTotalQuantity}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].purchaseRate}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].purchasedAmount}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].saleDetailsTotalAmount}')),
-                              ),
-                              DataCell(
-                                Center(
-                                    child: Text(
-                                        '${allProfitLossData[0].saleDetails![index].profitLoss}')),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
+            // SizedBox(height: 10.0),
+            // Container(
+            //   height: MediaQuery.of(context).size.height / 1.43,
+            //   width: double.infinity,
+            //   padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            //   child: Container(
+            //     width: double.infinity,
+            //     height: double.infinity,
+            //     child: SingleChildScrollView(
+            //       scrollDirection: Axis.vertical,
+            //       child: SingleChildScrollView(
+            //         scrollDirection: Axis.horizontal,
+            //         child: Container(
+            //           // color: Colors.red,
+            //           // padding:EdgeInsets.only(bottom: 16.0),
+            //           child: DataTable(
+            //             showCheckboxColumn: true,
+            //             border:
+            //                 TableBorder.all(color: Colors.black54, width: 1),
+            //             columns: [
+            //               DataColumn(
+            //                 label: Center(child: Text('Date')),
+            //               ),
+            //               DataColumn(
+            //                 label: Center(child: Text('Product')),
+            //               ),
+            //               DataColumn(
+            //                 label: Center(child: Text('Sold Quantity')),
+            //               ),
+            //               DataColumn(
+            //                 label: Center(child: Text('Purchase Rate')),
+            //               ),
+            //               DataColumn(
+            //                 label: Center(child: Text('Purchased Total')),
+            //               ),
+            //               DataColumn(
+            //                 label: Center(child: Text('Sold Amount')),
+            //               ),
+            //               DataColumn(
+            //                 label: Center(child: Text('Profit/Loss')),
+            //               ),
+            //             ],
+            //             rows: List.generate(
+            //               allSupplierPaymentReportData.length,
+            //               //allProfitLossData[0].saleDetails!.length,
+            //               (int index) => DataRow(
+            //                 cells: <DataCell>[
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0][index]}')),
+            //                   ),
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0].saleDetails![index].productName}')),
+            //                   ),
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0].saleDetails![index].saleDetailsTotalQuantity}')),
+            //                   ),
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0].saleDetails![index].purchaseRate}')),
+            //                   ),
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0].saleDetails![index].purchasedAmount}')),
+            //                   ),
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0].saleDetails![index].saleDetailsTotalAmount}')),
+            //                   ),
+            //                   DataCell(
+            //                     Center(
+            //                         child: Text(
+            //                             '${allSupplierPaymentReportData[0].saleDetails![index].profitLoss}')),
+            //                   )
+            //                 ],
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
-   
     );
   }
 }

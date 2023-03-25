@@ -4,12 +4,16 @@ import 'package:poss/Api_Integration/Api_Modelclass/all_Profit_Loss_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_customers_Class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_product_ledger_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_products_class.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/all_supplier_due_class.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/all_supplier_payment_report_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_suppliers_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/production_record_model_class.dart';
 import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
 import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
 import 'package:poss/Api_Integration/Api_all_products/api_all_products.dart';
 import 'package:poss/Api_Integration/Api_all_profit&loss/Api_all_profit_&_loss.dart';
+import 'package:poss/Api_Integration/Api_all_supplier_due/api_all_supplier_due.dart';
+import 'package:poss/Api_Integration/Api_all_supplier_payment_report/api_all_supplier_payment_report.dart';
 
 import '../Api_Integration/Api_Modelclass/all_meterial_purchase_record_class.dart';
 import '../Api_Integration/Api_all_meterial_purchase_record/Api_all_meterial_purchase_record.dart';
@@ -72,6 +76,24 @@ class CounterProvider extends ChangeNotifier {
       context, String? productId, String? dateFrom, String? dateTo) async {
     allProductLedgerlist = await ApiAllProductLedger.GetApiAllProductLedger(
         context, productId, dateFrom, dateTo);
+    notifyListeners();
+  }
+
+  //Supplier Due
+  List<AllSupplierDueClass> allSupplierDuelist = [];
+  getSupplierDue(context, String? supplierId) async {
+    allSupplierDuelist =
+        await ApiAllSupplierDue.GetApiAllSupplierDue(context, supplierId);
+    notifyListeners();
+  }
+
+  //Product Ledger
+  List<Payments> allSupplierPaymentReportlist = [];
+  getSupplierPaymentReport(
+      context, String? supplierId, String? dateFrom, String? dateTo) async {
+    allSupplierPaymentReportlist =
+        await ApiAllSupplierPaymentReport.GetApiAllSupplierPaymentReport(
+            context, supplierId, dateFrom, dateTo);
     notifyListeners();
   }
 }

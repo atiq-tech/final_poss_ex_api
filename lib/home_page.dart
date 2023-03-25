@@ -27,6 +27,7 @@ import 'package:poss/pages/production_pages/production_record_page.dart';
 import 'package:poss/pages/purchase_module/purchase_entry/purchase_entry.dart';
 import 'package:poss/pages/purchase_module/purchase_record.dart';
 import 'package:poss/pages/purchase_module/supplier_due_report.dart';
+import 'package:poss/pages/purchase_module/supplier_payment_report.dart';
 import 'package:poss/pages/report_module/profit&loss_report_page.dart';
 import 'package:poss/pages/sales_module/customer_due_list.dart';
 import 'package:poss/pages/sales_module/customer_list.dart';
@@ -740,6 +741,7 @@ class _HomePageState extends State<HomePage> {
     PurchaseEntryPage(),
     PurchaseRecord(),
     SupplierDueReport(),
+    SupplierPaymentReport(),
   ];
   //Report Module
   //
