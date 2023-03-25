@@ -4,7 +4,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_accounts/Api_all_accounts.dart';
+import 'package:poss/Api_Integration/Api_all_cash_transaction/Api_all_cash_transaction.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class CashTransactionReportPage extends StatefulWidget {
   const CashTransactionReportPage({super.key});
@@ -15,31 +19,16 @@ class CashTransactionReportPage extends StatefulWidget {
 }
 
 class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
-  final TextEditingController _DateController = TextEditingController();
-  final TextEditingController _Date2Controller = TextEditingController();
+  String? paymentType;
   String? _selectedType;
   List<String> _selectedTypeList = [
+    'All',
     'Received',
     'Payment',
   ];
-  String? _selectedAccount;
-  List<String> _selectedAccountList = [
-    'Auto Vara',
-    'Capital',
-    'Transport bill',
-    'Sallary',
-    'Discount',
-    'Withdraw',
-    'Van Survice',
-    'Machine Survice',
-    'Factory Rent',
-    'Purchase',
-    'Truck Vara',
-    'Mobile Recharge',
-    'Production bill',
-    'Interest',
-    'Instolment',
-  ];
+
+  final TextEditingController _DateController = TextEditingController();
+  final TextEditingController _Date2Controller = TextEditingController();
   String? firstPickedDate;
 
   void _firstSelectedDate() async {
@@ -50,7 +39,7 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -65,13 +54,38 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
 
+  String? _selectedAccount;
+  ApiAllAccounts? apiAllAccounts;
+  ApiAllCashTransactions? apiAllCashTransactions;
+  @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // ACCOUNTS
+    ApiAllAccounts apiAllAccounts;
+    Provider.of<CounterProvider>(context, listen: false).getAccounts(context);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //Account
+    final allAccountsData =
+        Provider.of<CounterProvider>(context).allAccountslist;
+    print(
+        "Accounts Accounts Accounts =Lenght is:::::${allAccountsData.length}");
+    //
+    //Cash Transaction
+    final allCashTransactionData =
+        Provider.of<CounterProvider>(context).allCashTransactionslist;
+    print(
+        "CT CT CT CT CT CT CT CT CT CT CT=Lenght is:::::${allCashTransactionData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Cash Transaction Report"),
       body: SingleChildScrollView(
@@ -116,6 +130,7 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
+                                isExpanded: true,
                                 hint: Text(
                                   'All',
                                   style: TextStyle(
@@ -128,6 +143,15 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     _selectedType = newValue!;
+                                    if (newValue == "All") {
+                                      paymentType = "";
+                                    }
+                                    if (newValue == "Received") {
+                                      paymentType = "received";
+                                    }
+                                    if (newValue == "Payment") {
+                                      paymentType = "paid";
+                                    }
                                   });
                                 },
                                 items: _selectedTypeList.map((location) {
@@ -173,6 +197,7 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
+                                isExpanded: true,
                                 hint: Text(
                                   'Select account',
                                   style: TextStyle(
@@ -184,18 +209,18 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                                 value: _selectedAccount,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _selectedAccount = newValue!;
+                                    _selectedAccount = newValue.toString();
                                   });
                                 },
-                                items: _selectedAccountList.map((location) {
+                                items: allAccountsData.map((location) {
                                   return DropdownMenuItem(
                                     child: Text(
-                                      location,
+                                      "${location.accName}",
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
                                     ),
-                                    value: location,
+                                    value: location.accSlNo,
                                   );
                                 }).toList(),
                               ),
@@ -204,7 +229,6 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                         ),
                       ],
                     ),
-                  
                     SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -236,8 +260,8 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: firstPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : firstPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -282,8 +306,8 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: secondPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : secondPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -304,7 +328,24 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                     Align(
                       alignment: Alignment.bottomRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            Provider.of<CounterProvider>(context, listen: false)
+                                .getCashTransactions(
+                                    context,
+                                    "${paymentType}",
+                                    "${_selectedAccount}",
+                                    "${firstPickedDate}",
+                                    "${secondPickedDate}");
+                            print(
+                                "CashTransactions selectedType::${paymentType}");
+                            print("CashTransactions ::${_selectedAccount}");
+                            print(
+                                "firstDate CashTransactions+++++=====::${firstPickedDate}");
+                            print(
+                                "secondPickedDate +CashTransactions+++++=====::${secondPickedDate}");
+                          });
+                        },
                         child: Container(
                           height: 35.0,
                           width: 85.0,
@@ -343,8 +384,6 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
                       child: DataTable(
                         showCheckboxColumn: true,
                         border:
@@ -370,26 +409,38 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
                           ),
                         ],
                         rows: List.generate(
-                          30,
+                          allCashTransactionData.length,
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allCashTransactionData[index].trId}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allCashTransactionData[index].trDate}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allCashTransactionData[index].trType}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allCashTransactionData[index].accName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allCashTransactionData[index].inAmount}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allCashTransactionData[index].outAmount}')),
                               ),
                             ],
                           ),

@@ -7,7 +7,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_bank_accounts/Api_all_bank_accounts.dart';
+import 'package:poss/Api_Integration/Api_all_bank_transaction/Api_all_bank_transaction.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class BankTransactionReportPage extends StatefulWidget {
   const BankTransactionReportPage({super.key});
@@ -18,31 +22,18 @@ class BankTransactionReportPage extends StatefulWidget {
 }
 
 class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
-  final TextEditingController _DateController = TextEditingController();
-  final TextEditingController _Date2Controller = TextEditingController();
+  String? _selectedAccount;
+//
+  String? paymentType;
   String? _selectedType;
   List<String> _selectedTypeList = [
-    'Received',
-    'Payment',
-  ];
-  String? _selectedAccount;
-  List<String> _selectedAccountList = [
-    'Auto Vara',
-    'Capital',
-    'Transport bill',
-    'Sallary',
-    'Discount',
+    'All',
+    'Deposit',
     'Withdraw',
-    'Van Survice',
-    'Machine Survice',
-    'Factory Rent',
-    'Purchase',
-    'Truck Vara',
-    'Mobile Recharge',
-    'Production bill',
-    'Interest',
-    'Instolment',
   ];
+
+  final TextEditingController _DateController = TextEditingController();
+  final TextEditingController _Date2Controller = TextEditingController();
   String? firstPickedDate;
 
   void _firstSelectedDate() async {
@@ -53,7 +44,7 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        firstPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
@@ -68,13 +59,37 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
         lastDate: DateTime(2050));
     if (selectedDate != null) {
       setState(() {
-        secondPickedDate = Jiffy(selectedDate).format("dd - MMM - yyyy");
+        secondPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
       });
     }
   }
 
+  ApiAllBankAccounts? apiAllBankAccounts;
+  ApiAllBankTransactions? apiAllBankTransactions;
+  @override
+  void initState() {
+    // TODO: implement initState
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    //bank ACCOUNTS
+    ApiAllBankAccounts apiAllBankAccounts;
+    Provider.of<CounterProvider>(context, listen: false)
+        .getBankAccounts(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //bank accounts
+    final allBankAccountsData =
+        Provider.of<CounterProvider>(context).allBankAccountlist;
+    print(
+        "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
+    //bank transactions
+    final allBankTransactionData =
+        Provider.of<CounterProvider>(context).allBankTransactionslist;
+    print(
+        "BT BT BT BT BT BT BT BT BT BT =Lenght is:::::${allBankAccountsData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Bank Transaction Report"),
       body: SingleChildScrollView(
@@ -119,6 +134,7 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
+                                isExpanded: true,
                                 hint: Text(
                                   'Select account',
                                   style: TextStyle(
@@ -130,18 +146,18 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                                 value: _selectedAccount,
                                 onChanged: (newValue) {
                                   setState(() {
-                                    _selectedAccount = newValue!;
+                                    _selectedAccount = newValue!.toString();
                                   });
                                 },
-                                items: _selectedAccountList.map((location) {
+                                items: allBankAccountsData.map((location) {
                                   return DropdownMenuItem(
                                     child: Text(
-                                      location,
+                                      "${location.bankName}",
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
                                     ),
-                                    value: location,
+                                    value: location.accountId,
                                   );
                                 }).toList(),
                               ),
@@ -176,6 +192,7 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
+                                isExpanded: true,
                                 hint: Text(
                                   'All',
                                   style: TextStyle(
@@ -188,6 +205,15 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                                 onChanged: (newValue) {
                                   setState(() {
                                     _selectedType = newValue!;
+                                    if (newValue == "All") {
+                                      paymentType = "";
+                                    }
+                                    if (newValue == "Deposit") {
+                                      paymentType = "deposit";
+                                    }
+                                    if (newValue == "Withdraw") {
+                                      paymentType = "withdraw";
+                                    }
                                   });
                                 },
                                 items: _selectedTypeList.map((location) {
@@ -208,7 +234,6 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                       ],
                     ),
                     SizedBox(height: 10),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -239,8 +264,8 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: firstPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : firstPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -280,8 +305,8 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                                   border: OutlineInputBorder(
                                       borderSide: BorderSide.none),
                                   hintText: secondPickedDate == null
-                                      ? Jiffy(DateTime.now())
-                                          .format("dd - MMM - yyyy")
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
                                       : secondPickedDate,
                                   hintStyle: TextStyle(
                                       fontSize: 14, color: Colors.black87),
@@ -298,12 +323,28 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                         ),
                       ],
                     ),
-                  
                     SizedBox(height: 4),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Provider.of<CounterProvider>(context, listen: false)
+                              .getBankTransactions(
+                            context,
+                            "${_selectedAccount}",
+                            "${firstPickedDate}",
+                            "${secondPickedDate}",
+                            "${paymentType}",
+                          );
+
+                          print("CashTransactions ::${_selectedAccount}");
+                          print(
+                              "firstDate CashTransactions+++++=====::${firstPickedDate}");
+                          print(
+                              "secondPickedDate +CashTransactions+++++=====::${secondPickedDate}");
+                          print(
+                              "CashTransactions selectedType::${paymentType}");
+                        },
                         child: Container(
                           height: 35.0,
                           width: 85.0,
@@ -325,12 +366,10 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                         ),
                       ),
                     ),
-                  
                   ],
                 ),
               ),
             ),
-            
             SizedBox(height: 10.0),
             Container(
               height: MediaQuery.of(context).size.height / 1.43,
@@ -344,53 +383,93 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
                       child: DataTable(
                         showCheckboxColumn: true,
                         border:
                             TableBorder.all(color: Colors.black54, width: 1),
                         columns: [
                           DataColumn(
-                            label: Center(child: Text('Tr.Id')),
+                            label: Center(child: Text('SI')),
                           ),
                           DataColumn(
-                            label: Center(child: Text('Date')),
+                            label: Center(child: Text('Description')),
                           ),
                           DataColumn(
-                            label: Center(child: Text('Tr.Type')),
+                            label: Center(child: Text('Transaction Date')),
                           ),
                           DataColumn(
                             label: Center(child: Text('Account Name')),
                           ),
                           DataColumn(
-                            label: Center(child: Text('Received Amount')),
+                            label: Center(child: Text('Account Number')),
                           ),
                           DataColumn(
-                            label: Center(child: Text('Payment Amount')),
+                            label: Center(child: Text('Bank Name')),
                           ),
+                          DataColumn(
+                            label: Center(child: Text('Note')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Deposit')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Withdraw')),
+                          )
                         ],
                         rows: List.generate(
-                          30,
+                          allBankTransactionData.length,
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(child: Text('$index')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allBankTransactionData[index].description}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allBankTransactionData[index].transactionDate}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allBankTransactionData[index].accountName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allBankTransactionData[index].accountNumber}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allBankTransactionData[index].bankName}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: Text(
+                                        '${allBankTransactionData[index].note}')),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: allBankTransactionData[index]
+                                                .transactionType ==
+                                            "deposit"
+                                        ? Text(
+                                            '${allBankTransactionData[index].amount}')
+                                        : Text(" ")),
+                              ),
+                              DataCell(
+                                Center(
+                                    child: allBankTransactionData[index]
+                                                .transactionType ==
+                                            "withdraw"
+                                        ? Text(
+                                            '${allBankTransactionData[index].amount}')
+                                        : Text(" ")),
                               ),
                             ],
                           ),
@@ -401,7 +480,6 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
                 ),
               ),
             ),
-          
           ],
         ),
       ),
