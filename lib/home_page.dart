@@ -45,31 +45,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // static GetApiData(context) async {
-  //   List<ProductionRecordModelClass> allProductionRecordlist = [];
-  //   ProductionRecordModelClass productionRecordModelClass;
-  //   try {
-  //     var Response = await http.post(
-  //         Uri.parse("http://testapi.happykhata.com/api/v1/getProductionRecord"),
-  //         headers: {
-  //           "Authorization": "Bearer ${GetStorage().read("token")}",
-  //         },
-  //         body: {});
-  //     print("=========ddddddddddddddddddddddddd==========:::${Response.body}");
 
-  //     // if (Response.statusCode == 200) {
-  //     //   var data = jsonDecode(Response.body);
-  //     //   print("=====aaaaapppppiiii====dada : ${data}");
-  //     //   for (var i in data) {
-  //     //     productionRecordModelClass = ProductionRecordModelClass.fromJson(i);
-  //     //     allProductionRecordlist.add(productionRecordModelClass);
-  //     //   }
-  //     // }
-  //   } catch (e) {
-  //     print("Something is errror:$e");
-  //   }
-  //   return allProductionRecordlist;
-  // }
 
   @override
   void initState() {

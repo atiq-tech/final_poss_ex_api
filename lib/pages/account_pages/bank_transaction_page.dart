@@ -4,8 +4,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart' as jiffy;
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_add_bank_transaction/Api_all_add_bank_transaction.dart';
+import 'package:poss/Api_Integration/Api_all_bank_accounts/Api_all_bank_accounts.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
-
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class BankTransactionPage extends StatefulWidget {
   const BankTransactionPage({super.key});
@@ -22,6 +25,21 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   String? _selectedAccount;
+  String? firstPickedDate;
+
+  void _firstSelectedDate() async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050));
+    if (selectedDate != null) {
+      setState(() {
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
+  }
+
   List<String> _selectedAccountList = [
     'Happy Product-020069(Agrani Bank)',
     'Happy Product-070075(Brac Bank)',
@@ -31,14 +49,32 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
     'Happy Product C.D-069(Mercentile Bank)',
     'Happy Product-256524(City Bank)',
   ];
+  String? paymentType;
   String? _transactionType;
   List<String> _transactionTypeList = [
     'Deposit',
     'Withdraw',
   ];
-  String? firstPickedDate;
+  ApiAllBankAccounts? apiAllBankAccounts;
+  ApiAllAddBankTransactions? apiAllAddBankTransactions;
+  @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    //bank ACCOUNTS
+    ApiAllBankAccounts apiAllBankAccounts;
+    Provider.of<CounterProvider>(context, listen: false)
+        .getBankAccounts(context);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //bank accounts
+    final allBankAccountsData =
+        Provider.of<CounterProvider>(context).allBankAccountlist;
+    print(
+        "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Bank Transaction"),
       body: InkWell(
@@ -65,60 +101,54 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Text(
                               "Date",
                               style: TextStyle(
-                                  fontSize: 12.0,
+                                  fontSize: 14.0,
                                   color: Color.fromARGB(255, 126, 125, 125)),
                             ),
                           ),
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
-                            flex: 12,
-                            child: GestureDetector(
-                              onTap: () async {
-                                final selectedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
-                                    lastDate: DateTime(2050));
-                                if (selectedDate != null) {
-                                  setState(() {
-                                    firstPickedDate = Jiffy(selectedDate)
-                                        .format("dd - MMM - yyyy");
-                                  });
-                                }
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    top: 5, right: 5, bottom: 5),
-                                height: 32,
-                                width: double.infinity,
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 7, 125, 180),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      firstPickedDate == null
-                                          ? Jiffy(DateTime.now())
-                                              .format("dd - MMM - yyyy")
-                                          : firstPickedDate!,
-                                    ),
-                                    Icon(
+                            flex: 11,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: 5,
+                                top: 5,
+                                bottom: 5,
+                              ),
+                              height: 30,
+                              child: GestureDetector(
+                                onTap: (() {
+                                  _firstSelectedDate();
+                                }),
+                                child: TextFormField(
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 10, left: 10),
+                                    filled: true,
+                                    fillColor: Colors.blue[50],
+                                    suffixIcon: Icon(
                                       Icons.calendar_month,
-                                      size: 20,
-                                    )
-                                  ],
+                                      color: Colors.black87,
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    hintText: firstPickedDate == null
+                                        ? DateFormat('yyyy-MM-dd')
+                                            .format(DateTime.now())
+                                        : firstPickedDate,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14, color: Colors.black87),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return null;
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ),
@@ -128,17 +158,17 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Text(
                               "Account",
                               style: TextStyle(
-                                  fontSize: 12.0,
+                                  fontSize: 14.0,
                                   color: Color.fromARGB(255, 126, 125, 125)),
                             ),
                           ),
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
-                            flex: 12,
+                            flex: 11,
                             child: Container(
                               height: 28.0,
                               width: MediaQuery.of(context).size.width / 2,
@@ -151,6 +181,7 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  isExpanded: true,
                                   hint: Text(
                                     'Select account',
                                     style: TextStyle(
@@ -161,19 +192,19 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                                   value: _selectedAccount,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _selectedAccount = newValue!;
+                                      _selectedAccount = newValue!.toString();
                                     });
                                   },
-                                  items: _selectedAccountList.map((location) {
+                                  items: allBankAccountsData.map((location) {
                                     return DropdownMenuItem(
                                       child: Text(
-                                        location,
+                                        "${location.bankName}",
                                         style: TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             color: Color.fromARGB(
                                                 255, 31, 30, 30)),
                                       ),
-                                      value: location,
+                                      value: location.accountId,
                                     );
                                   }).toList(),
                                 ),
@@ -186,17 +217,17 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Text(
                               "Transaction Type",
                               style: TextStyle(
-                                  fontSize: 12.0,
+                                  fontSize: 14.0,
                                   color: Color.fromARGB(255, 126, 125, 125)),
                             ),
                           ),
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
-                            flex: 12,
+                            flex: 11,
                             child: Container(
                               height: 28.0,
                               width: MediaQuery.of(context).size.width / 2,
@@ -209,6 +240,7 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  isExpanded: true,
                                   hint: Text(
                                     'Select Type',
                                     style: TextStyle(
@@ -220,6 +252,12 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                                   onChanged: (newValue) {
                                     setState(() {
                                       _transactionType = newValue!;
+                                      if (newValue == "Deposit") {
+                                        paymentType = "deposit";
+                                      }
+                                      if (newValue == "Withdraw") {
+                                        paymentType = "withdraw";
+                                      }
                                     });
                                   },
                                   items: _transactionTypeList.map((location) {
@@ -244,17 +282,17 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Text(
                               "Amount",
                               style: TextStyle(
-                                  fontSize: 12.0,
+                                  fontSize: 14.0,
                                   color: Color.fromARGB(255, 126, 125, 125)),
                             ),
                           ),
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
-                            flex: 12,
+                            flex: 11,
                             child: Container(
                               height: 28.0,
                               width: MediaQuery.of(context).size.width / 2,
@@ -286,17 +324,17 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Text(
                               "Note",
                               style: TextStyle(
-                                  fontSize: 12.0,
+                                  fontSize: 14.0,
                                   color: Color.fromARGB(255, 126, 125, 125)),
                             ),
                           ),
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
-                            flex: 12,
+                            flex: 11,
                             child: Container(
                               height: 28.0,
                               width: MediaQuery.of(context).size.width / 2,
@@ -327,24 +365,40 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                       SizedBox(height: 8.0),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: Container(
-                          height: 35.0,
-                          width: 180.0,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Color.fromARGB(255, 131, 224, 146),
-                                width: 2.0),
-                            color: Color.fromARGB(255, 5, 120, 165),
-                            borderRadius: BorderRadius.circular(10.0),
+                        child: InkWell(
+                          onTap: () {
+                            ApiAllAddBankTransactions
+                                .GetApiAllAddBankTransactions(
+                                    context,
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    0,
+                                    "",                                   
+                                  );
+                            _amountController.text;
+                            _noteController.text;
+                          },
+                          child: Container(
+                            height: 35.0,
+                            width: 180.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Color.fromARGB(255, 131, 224, 146),
+                                  width: 2.0),
+                              color: Color.fromARGB(255, 5, 120, 165),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "SAVE TRANSACTIONS",
+                              style: TextStyle(
+                                  letterSpacing: 1.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            )),
                           ),
-                          child: Center(
-                              child: Text(
-                            "SAVE TRANSACTIONS",
-                            style: TextStyle(
-                                letterSpacing: 1.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          )),
                         ),
                       ),
                     ],

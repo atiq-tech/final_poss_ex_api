@@ -4,10 +4,14 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart' as jiffy;
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_accounts/Api_all_accounts.dart';
+import 'package:poss/Api_Integration/Api_all_add_cash_transaction/Api_all_add_cash_transaction.dart';
+import 'package:poss/Api_Integration/Api_all_get_cash_transaction/Api_all_get_cash_transaction.dart';
 
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/pages/pages_common/account_information_page.dart';
-
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class CashTransactionPage extends StatefulWidget {
   const CashTransactionPage({super.key});
@@ -24,32 +28,55 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
   final TextEditingController _DescriptionController = TextEditingController();
   final TextEditingController _AmountController = TextEditingController();
 
+  String? paymentType;
   String? _selectedType;
   List<String> _selectedTypeList = [
     'Cash Receive',
     'Cash Payment',
   ];
   String? _selectedAccount;
-  List<String> _selectedAccountList = [
-    'Auto Vara',
-    'Capital',
-    'Transport bill',
-    'Sallary',
-    'Discount',
-    'Withdraw',
-    'Van Survice',
-    'Machine Survice',
-    'Factory Rent',
-    'Purchase',
-    'Truck Vara',
-    'Mobile Recharge',
-    'Production bill',
-    'Interest',
-    'Instolment',
-  ];
   String? firstPickedDate;
+
+  void _firstSelectedDate() async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050));
+    if (selectedDate != null) {
+      setState(() {
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
+  }
+
+  ApiAllAccounts? apiAllAccounts;
+  ApiAllAddCashTransactions? apiAllAddCashTransactions;
+  ApiAllGetCashTransactions? apiAllGetCashTransactions;
+  @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // ACCOUNTS
+    ApiAllAccounts apiAllAccounts;
+    Provider.of<CounterProvider>(context, listen: false).getAccounts(context);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //Account
+    final allAccountsData =
+        Provider.of<CounterProvider>(context).allAccountslist;
+    print(
+        "Cash transactions Accounts Accounts =Lenght is:::::${allAccountsData.length}");
+    //Get Cash Transaction
+    final allGetCashTransactionData =
+        Provider.of<CounterProvider>(context).allGetCashTransactionslist;
+    print(
+        "GCT GCT GCT GCT GCT GCT GCT GCT GCT GCT GCT=Lenght is:::::${allGetCashTransactionData.length}");
+  
+
     return Scaffold(
       appBar: CustomAppBar(title: "Cash Transaction"),
       body: InkWell(
@@ -87,57 +114,51 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
                             flex: 11,
-                            child: GestureDetector(
-                              onTap: () async {
-                                final selectedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
-                                    lastDate: DateTime(2050));
-                                if (selectedDate != null) {
-                                  setState(() {
-                                    firstPickedDate = Jiffy(selectedDate)
-                                        .format("dd - MMM - yyyy");
-                                  });
-                                }
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    top: 5, right: 5, bottom: 5),
-                                height: 32,
-                                width: double.infinity,
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 7, 125, 180),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      firstPickedDate == null
-                                          ? Jiffy(DateTime.now())
-                                              .format("dd - MMM - yyyy")
-                                          : firstPickedDate!,
-                                    ),
-                                    Icon(
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: 5,
+                                top: 5,
+                                bottom: 5,
+                              ),
+                              height: 30,
+                              child: GestureDetector(
+                                onTap: (() {
+                                  _firstSelectedDate();
+                                }),
+                                child: TextFormField(
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 10, left: 10),
+                                    filled: true,
+                                    fillColor: Colors.blue[50],
+                                    suffixIcon: Icon(
                                       Icons.calendar_month,
-                                      size: 20,
-                                    )
-                                  ],
+                                      color: Colors.black87,
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    hintText: firstPickedDate == null
+                                        ? DateFormat('yyyy-MM-dd')
+                                            .format(DateTime.now())
+                                        : firstPickedDate,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14, color: Colors.black87),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return null;
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 3.0),
                       
+                      SizedBox(height: 3.0),
                       Row(
                         children: [
                           Expanded(
@@ -175,6 +196,12 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                                   onChanged: (newValue) {
                                     setState(() {
                                       _selectedType = newValue!;
+                                      if (newValue == "Receive") {
+                                        paymentType = "In Cash";
+                                      }
+                                      if (newValue == "Payment") {
+                                        paymentType = "Out Cash";
+                                      }
                                     });
                                   },
                                   items: _selectedTypeList.map((location) {
@@ -194,7 +221,6 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                           ),
                         ],
                       ),
-                    
                       SizedBox(height: 3.0),
                       Row(
                         children: [
@@ -232,18 +258,18 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                                   value: _selectedAccount,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _selectedAccount = newValue!;
+                                      _selectedAccount = newValue!.toString();
                                     });
                                   },
-                                  items: _selectedAccountList.map((location) {
+                                  items: allAccountsData.map((location) {
                                     return DropdownMenuItem(
                                       child: Text(
-                                        location,
+                                        "${location.accName}",
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
                                       ),
-                                      value: location,
+                                      value: location.accSlNo,
                                     );
                                   }).toList(),
                                 ),
@@ -364,44 +390,76 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            height: 35.0,
-                            width: 85.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 75, 196, 201),
-                                  width: 2.0),
-                              color: Color.fromARGB(255, 105, 170, 88),
-                              borderRadius: BorderRadius.circular(10.0),
+                          InkWell(
+                            onTap: () {
+                              ApiAllAddCashTransactions
+                                  .GetApiAllAddCashTransactions(
+                                context,
+                                "",
+                                10,
+                                20,
+                                "",
+                                "",
+                                10,
+                                "",
+                                "",
+                                "",
+                              );
+                              Provider.of<CounterProvider>(context,
+                                      listen: false)
+                                  .getGetCashTransactions(context, "", "");
+                              _DescriptionController.text;
+                              _AmountController.text;
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 85.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 75, 196, 201),
+                                    width: 2.0),
+                                color: Color.fromARGB(255, 105, 170, 88),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "SAVE",
+                                style: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              "SAVE",
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
                           ),
                           SizedBox(width: 4.0),
-                          Container(
-                            height: 35.0,
-                            width: 85.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 75, 196, 201),
-                                  width: 2.0),
-                              color: Color.fromARGB(255, 196, 81, 65),
-                              borderRadius: BorderRadius.circular(10.0),
+                          InkWell(
+                            onTap: () {
+                              for (int i = 0;
+                                  i < allGetCashTransactionData.length;
+                                  i++) {
+                                print(
+                                    "${allGetCashTransactionData[i].accName}");
+                              }
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 85.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 75, 196, 201),
+                                    width: 2.0),
+                                color: Color.fromARGB(255, 196, 81, 65),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "CANCEL",
+                                style: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              "CANCEL",
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
                           ),
                         ],
                       ),
@@ -431,7 +489,6 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                   ),
                 ),
               ),
-              
               SizedBox(height: 10.0),
               Container(
                 height: MediaQuery.of(context).size.height / 1.43,
@@ -478,29 +535,43 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                             ),
                           ],
                           rows: List.generate(
-                            30,
+                            allGetCashTransactionData.length,
                             (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].trId}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].accName}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].trDate}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].trDescription}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].inAmount}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].outAmount}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCashTransactionData[index].addBy}')),
                                 ),
                                 DataCell(
                                   Row(
@@ -523,7 +594,6 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                   ),
                 ),
               ),
-           
             ],
           ),
         ),
