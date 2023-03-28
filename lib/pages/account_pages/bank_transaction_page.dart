@@ -40,15 +40,6 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
     }
   }
 
-  List<String> _selectedAccountList = [
-    'Happy Product-020069(Agrani Bank)',
-    'Happy Product-070075(Brac Bank)',
-    'Happy Product C.C-1358(Mercentile Bank)',
-    'Happy Product-01009(Jonota Bank)',
-    'New Happy Product-20069(Islami Bank)',
-    'Happy Product C.D-069(Mercentile Bank)',
-    'Happy Product-256524(City Bank)',
-  ];
   String? paymentType;
   String? _transactionType;
   List<String> _transactionTypeList = [
@@ -75,6 +66,11 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
         Provider.of<CounterProvider>(context).allBankAccountlist;
     print(
         "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
+    //Get Bank Transaction
+    final allGetBankTransactionData =
+        Provider.of<CounterProvider>(context).allGetBankTransactionslist;
+    print(
+        "GBT GBT GBT GBT GBT GBT GBT GBT GBT =Lenght is:::::${allGetBankTransactionData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Bank Transaction"),
       body: InkWell(
@@ -369,14 +365,19 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                           onTap: () {
                             ApiAllAddBankTransactions
                                 .GetApiAllAddBankTransactions(
+                              context,
+                              "",
+                              "",
+                              "",
+                              "",
+                              0,
+                              "",
+                            );
+                            Provider.of<CounterProvider>(context, listen: false)
+                                .getGetBankTransactions(
                                     context,
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    0,
-                                    "",                                   
-                                  );
+                                    "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+                                    "${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
                             _amountController.text;
                             _noteController.text;
                           },
@@ -468,46 +469,45 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                             DataColumn(
                               label: Center(child: Text('Amount')),
                             ),
-                            DataColumn(
-                              label: Center(child: Text('Action')),
-                            ),
                           ],
                           rows: List.generate(
-                            30,
+                            allGetBankTransactionData.length,
                             (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].transactionDate}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].accountName}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].accountNumber}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].bankName}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].transactionType}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].note}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
-                                ),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.edit)),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.delete))
-                                    ],
-                                  ),
+                                  Center(
+                                      child: Text(
+                                          '${allGetBankTransactionData[index].amount}')),
                                 ),
                               ],
                             ),

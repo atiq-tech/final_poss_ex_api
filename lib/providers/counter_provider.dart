@@ -7,6 +7,7 @@ import 'package:poss/Api_Integration/Api_Modelclass/all_bank_account_model_class
 import 'package:poss/Api_Integration/Api_Modelclass/all_bank_transaction_model_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_cash_transaction_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_customers_Class.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/all_get_bank_transaction_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_cash_transaction_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_product_ledger_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_products_class.dart';
@@ -20,6 +21,7 @@ import 'package:poss/Api_Integration/Api_all_bank_accounts/Api_all_bank_accounts
 import 'package:poss/Api_Integration/Api_all_bank_transaction/Api_all_bank_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_cash_transaction/Api_all_cash_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
+import 'package:poss/Api_Integration/Api_all_get_bank_transaction/Api_all_get_bank_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_get_cash_transaction/Api_all_get_cash_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
 import 'package:poss/Api_Integration/Api_all_products/api_all_products.dart';
@@ -143,13 +145,22 @@ class CounterProvider extends ChangeNotifier {
             context, accountId, dateFrom, dateTo, transactionType);
     notifyListeners();
   }
-    //Get CashTransactions
- List<AllGetCashTransactionsClass> allGetCashTransactionslist = [];
-  getGetCashTransactions(context,
-      String? dateFrom, String? dateTo) async {
+
+  //Get CashTransactions
+  List<AllGetCashTransactionsClass> allGetCashTransactionslist = [];
+  getGetCashTransactions(context, String? dateFrom, String? dateTo) async {
     allGetCashTransactionslist =
         await ApiAllGetCashTransactions.GetApiAllGetCashTransactions(
-            context,dateFrom, dateTo);
+            context, dateFrom, dateTo);
+    notifyListeners();
+  }
+
+  //Get bankTransactions
+  List<AllGetBankTransactionClass> allGetBankTransactionslist = [];
+  getGetBankTransactions(context, String? dateFrom, String? dateTo) async {
+    allGetBankTransactionslist =
+        await ApiAllGetBankTransactions.GetApiAllGetBankTransactions(
+            context, dateFrom, dateTo);
     notifyListeners();
   }
 }

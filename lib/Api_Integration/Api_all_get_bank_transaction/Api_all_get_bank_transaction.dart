@@ -4,15 +4,16 @@ import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_Profit_Loss_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_cash_transaction_class.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/all_get_bank_transaction_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_cash_transaction_class.dart';
 import 'package:poss/const_page.dart';
 
-class ApiAllGetCashTransactions {
-  static GetApiAllGetCashTransactions(
+class ApiAllGetBankTransactions {
+  static GetApiAllGetBankTransactions(
       context, String? dateFrom, String? dateTo) async {
-    String Link = "${BaseUrl}api/v1/getCashTransactions";
-    List<AllGetCashTransactionsClass> allGetCashTransactionslist = [];
-    AllGetCashTransactionsClass allGetCashTransactionsClass;
+    String Link = "${BaseUrl}api/v1/getAllBankTransactions";
+    List<AllGetBankTransactionClass> allGetBankTransactionslist = [];
+    AllGetBankTransactionClass allGetBankTransactionClass;
     try {
       Response response = await Dio().post(Link,
           data: {
@@ -23,23 +24,23 @@ class ApiAllGetCashTransactions {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${GetStorage().read("token")}",
           }));
-      print("GetCashTransactions GetCashTransactions:::${response.data}");
+      print("Get bank Transactions Get bank Transactions:::${response.data}");
       print("===========++++++=============");
-      print("GetCashTransactions GetCashTransactions");
+      print("Get bank Transactions Get bank Transactions");
       print("============++++++=========");
 
       var data = jsonDecode(response.data);
-      print("===========CashTransactions CashTransactions=======: ${data}");
+      print("===========Bank Transactions Bank Transactions=======: ${data}");
       for (var i in data) {
-        allGetCashTransactionsClass = AllGetCashTransactionsClass.fromJson(i);
-        allGetCashTransactionslist.add(allGetCashTransactionsClass);
+        allGetBankTransactionClass = AllGetBankTransactionClass.fromJson(i);
+        allGetBankTransactionslist.add(allGetBankTransactionClass);
       }
 
       print(
-          "Get Get CashTransactions length is ${allGetCashTransactionslist.length}  ${allGetCashTransactionslist[0].accName}");
+          "Get Get Bank Transactions length is ${allGetBankTransactionslist.length}  ${allGetBankTransactionslist[0].accountName}");
     } catch (e) {
-      print("Something is wrong all Get GET CashTransactions list=======:$e");
+      print("Something is wrong all Get GEt bbank Transactions list=======:$e");
     }
-    return allGetCashTransactionslist;
+    return allGetBankTransactionslist;
   }
 }
