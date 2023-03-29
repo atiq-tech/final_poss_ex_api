@@ -150,7 +150,7 @@ class CounterProvider extends ChangeNotifier {
 
   //Get CashTransactions
   List<AllGetCashTransactionsClass> allGetCashTransactionslist = [];
-  getGetCashTransactions(context, String? dateFrom, String? dateTo) async {
+   getGetCashTransactions(context, String? dateFrom, String? dateTo) async {
     allGetCashTransactionslist =
         await ApiAllGetCashTransactions.GetApiAllGetCashTransactions(
             context, dateFrom, dateTo);

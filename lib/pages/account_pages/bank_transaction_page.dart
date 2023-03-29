@@ -366,12 +366,12 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
                             ApiAllAddBankTransactions
                                 .GetApiAllAddBankTransactions(
                               context,
-                              "",
-                              "",
-                              "",
-                              "",
+                              "$_selectedAccount",
+                              "${_amountController.text}",
+                              "${_noteController.text}",
+                              "$firstPickedDate",
                               0,
-                              "",
+                              "$paymentType",
                             );
                             Provider.of<CounterProvider>(context, listen: false)
                                 .getGetBankTransactions(

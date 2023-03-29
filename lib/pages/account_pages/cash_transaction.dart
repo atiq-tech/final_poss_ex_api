@@ -367,23 +367,23 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                             onTap: () {
                               ApiAllAddCashTransactions
                                   .GetApiAllAddCashTransactions(
-                                context,
-                                "3",
+                                "$_selectedAccount",
                                 0,
                                 int.parse(_AmountController.text),
-                                _DescriptionController.text,
-                                "TR11053",
+                                "${_DescriptionController.text}",
+                                "TR11123",
                                 0,
-                                "In Cash",
+                                "$paymentType",
                                 "Official",
-                                "${firstPickedDate}",
+                                "$firstPickedDate",
                               );
+
                               Provider.of<CounterProvider>(context,
                                       listen: false)
                                   .getGetCashTransactions(
-                                      context, "${DateFormat('yyyy-MM-dd').format(DateTime.now())}", 
+                                      context,
+                                      "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
                                       "${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
-                     
                             },
                             child: Container(
                               height: 35.0,

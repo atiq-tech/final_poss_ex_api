@@ -28,7 +28,7 @@ class ApiAllAccounts {
       for (var i in data) {
         allAccountsModelClass = AllAccountsModelClass.fromJson(i);
        allAccountslist.add(allAccountsModelClass);
-        print(allAccountslist);
+       
       }
     } catch (e) {
       print("Something is wrong all Accounts list=======:$e");

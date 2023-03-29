@@ -9,7 +9,6 @@ import 'package:poss/const_page.dart';
 
 class ApiAllAddCashTransactions {
   static GetApiAllAddCashTransactions(
-    context,
     String? Acc_SlID,
     int? In_Amount,
     int? Out_Amount,
@@ -25,24 +24,15 @@ class ApiAllAddCashTransactions {
     try {
       Response response = await Dio().post(Link,
           data: {
-            // "Acc_SlID": "$Acc_SlID",
-            // "In_Amount": 0,
-            // "Out_Amount": 0,
-            // "Tr_Description": "$Tr_Description",
-            // "Tr_Id": "$Tr_Id",
-            // "Tr_SlNo": 0,
-            // "Tr_Type": "$Tr_Type",
-            // "Tr_account_Type": "$Tr_account_Type",
-            // "Tr_date": "$Tr_date",
-            "Acc_SlID": "3",
-            "In_Amount": 10,
-            "Out_Amount": 0,
+            "Acc_SlID": "$Acc_SlID",
+            "In_Amount": In_Amount,
+            "Out_Amount": Out_Amount,
             "Tr_Description": "$Tr_Description",
-            "Tr_Id": "TR11067",
-            "Tr_SlNo": 0,
-            "Tr_Type": "In Cash",
-            "Tr_account_Type": "Official",
-            "Tr_date": "$Tr_date",
+            "Tr_Id": "$Tr_Id",
+            "Tr_SlNo": Tr_SlNo,
+            "Tr_Type": "$Tr_Type",
+            "Tr_account_Type": "$Tr_account_Type",
+            "Tr_date": "$Tr_date"
           },
           options: Options(headers: {
             "Content-Type": "application/json",
@@ -52,10 +42,6 @@ class ApiAllAddCashTransactions {
       print("===========++++++=============");
       print("Add CashTransactions Add CashTransactions");
       print("============++++++=========");
-
-      var data = jsonDecode(response.data);
-
-      print("Add CashTransactions length is ${data}");
     } catch (e) {
       print("Something is wrong all Add CashTransactions list=======:$e");
     }

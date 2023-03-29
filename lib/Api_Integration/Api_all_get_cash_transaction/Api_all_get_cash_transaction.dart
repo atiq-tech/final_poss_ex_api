@@ -36,7 +36,7 @@ class ApiAllGetCashTransactions {
       }
 
       print(
-          "Get Get CashTransactions length is ${allGetCashTransactionslist.length}  ${allGetCashTransactionslist[0].accName}");
+          "Get Get CashTransactions length is ${allGetCashTransactionslist.length}");
     } catch (e) {
       print("Something is wrong all Get GET CashTransactions list=======:$e");
     }
