@@ -1,8 +1,15 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:poss/Api_Integration/Api_all_add_supplier/Api_all_add_supplier.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
-
+import 'package:poss/const_page.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class SupplierEntryPage extends StatefulWidget {
   const SupplierEntryPage({super.key});
@@ -20,7 +27,18 @@ class _SupplierEntryPageState extends State<SupplierEntryPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _previousDueController = TextEditingController();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //Get Bank Transaction
+    final allGetGetSupplierData =
+        Provider.of<CounterProvider>(context).allGetSupplierslist;
+    print(
+        "GS GS GS GS GS GS GS GS GS GS GS GS GS GS GS=Lenght is:::::${allGetGetSupplierData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Supplier Entry"),
       body: SingleChildScrollView(
@@ -185,7 +203,6 @@ class _SupplierEntryPageState extends State<SupplierEntryPage> {
                             width: MediaQuery.of(context).size.width / 2,
                             child: TextField(
                               controller: _addressController,
-                              keyboardType: TextInputType.streetAddress,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 focusedBorder: OutlineInputBorder(
@@ -330,7 +347,11 @@ class _SupplierEntryPageState extends State<SupplierEntryPage> {
                     Align(
                       alignment: Alignment.bottomRight,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          GetApiAllAddSupplier();
+                          Provider.of<CounterProvider>(context, listen: false)
+                              .getNewSuppliers(context);
+                        },
                         child: Container(
                           height: 35.0,
                           width: 70.0,
@@ -391,8 +412,6 @@ class _SupplierEntryPageState extends State<SupplierEntryPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
                       child: DataTable(
                         showCheckboxColumn: true,
                         border:
@@ -413,40 +432,35 @@ class _SupplierEntryPageState extends State<SupplierEntryPage> {
                           DataColumn(
                             label: Center(child: Text('Contact Number')),
                           ),
-                          DataColumn(
-                            label: Center(child: Text('Action')),
-                          ),
                         ],
                         rows: List.generate(
-                          30,
+                          allGetGetSupplierData.length,
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allGetGetSupplierData[index].supplierCode}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allGetGetSupplierData[index].supplierName}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allGetGetSupplierData[index].contactPerson}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
+                                Center(
+                                    child: Text(
+                                        '${allGetGetSupplierData[index].supplierAddress}')),
                               ),
                               DataCell(
-                                Center(child: Text('Row $index')),
-                              ),
-                              DataCell(
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.edit)),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.delete))
-                                  ],
-                                ),
+                                Center(
+                                    child: Text(
+                                        '${allGetGetSupplierData[index].supplierMobile}')),
                               ),
                             ],
                           ),
@@ -461,5 +475,41 @@ class _SupplierEntryPageState extends State<SupplierEntryPage> {
         ),
       ),
     );
+  }
+
+  GetApiAllAddSupplier() async {
+    String Link = "${BaseUrl}api/v1/addSupplier";
+
+    try {
+      Response response = await Dio().post(Link,
+          data: {
+          {
+            
+            "Supplier_SlNo":0,
+          "Supplier_Code":"S00097",
+          "Supplier_Name":"hj",
+          "Supplier_Mobile":"5466454564",
+          "Supplier_Email":"hjhgj",
+          "Supplier_Address":"jhkh",
+          "contact_person":"jhikjh",
+          "previous_due":0
+          
+          }
+          },
+          options: Options(headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GetStorage().read("token")}",
+          }));
+      print(" Add Supplier:::${response.data}");
+      print("===========++++++=============");
+      print("Add Supplier Add Supplier");
+      print("============++++++=========");
+
+      var data = jsonDecode(response.data);
+
+      print("Add Supplier Add Supplier length is ${data}");
+    } catch (e) {
+      print("Something is wrong all Add Supplier Add Supplier=======:$e");
+    }
   }
 }

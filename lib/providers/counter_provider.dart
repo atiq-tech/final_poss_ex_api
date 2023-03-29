@@ -9,6 +9,7 @@ import 'package:poss/Api_Integration/Api_Modelclass/all_cash_transaction_class.d
 import 'package:poss/Api_Integration/Api_Modelclass/all_customers_Class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_bank_transaction_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_cash_transaction_class.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/all_get_supplier_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_product_ledger_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_products_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_supplier_due_class.dart';
@@ -24,6 +25,7 @@ import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
 import 'package:poss/Api_Integration/Api_all_get_bank_transaction/Api_all_get_bank_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_get_cash_transaction/Api_all_get_cash_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
+import 'package:poss/Api_Integration/Api_all_newget_supplier/Api_all_newget_supplier.dart';
 import 'package:poss/Api_Integration/Api_all_products/api_all_products.dart';
 import 'package:poss/Api_Integration/Api_all_profit&loss/Api_all_profit_&_loss.dart';
 import 'package:poss/Api_Integration/Api_all_supplier_due/api_all_supplier_due.dart';
@@ -161,6 +163,14 @@ class CounterProvider extends ChangeNotifier {
     allGetBankTransactionslist =
         await ApiAllGetBankTransactions.GetApiAllGetBankTransactions(
             context, dateFrom, dateTo);
+    notifyListeners();
+  }
+
+  //New Get Supplier
+  List<AllGetSupplierClass> allGetSupplierslist = [];
+  getNewSuppliers(context) async {
+    allGetSupplierslist =
+        await ApiAllNewGetSuppliers.GetApiAllNewGetSuppliers(context);
     notifyListeners();
   }
 }

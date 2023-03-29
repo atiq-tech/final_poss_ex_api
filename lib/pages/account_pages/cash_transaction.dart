@@ -383,8 +383,7 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                                   .getGetCashTransactions(
                                       context, "${DateFormat('yyyy-MM-dd').format(DateTime.now())}", 
                                       "${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
-                              // _DescriptionController.text;
-                              // _AmountController.text;
+                     
                             },
                             child: Container(
                               height: 35.0,

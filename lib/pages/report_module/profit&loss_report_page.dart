@@ -147,9 +147,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                                     _selectedAccount = newValue.toString();
                                     print(
                                         "Customer Si no ===========>: $newValue");
-                                    // Profit & Loss
-
-                                    //
+                            
                                   });
                                 },
                                 items: allCustomersData.map((location) {
@@ -330,8 +328,6 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
                       child: DataTable(
                         showCheckboxColumn: true,
                         border:
@@ -361,7 +357,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                         ],
                         rows: List.generate(
                           allProfitLossData.length,
-                          //allProfitLossData[0].saleDetails!.length,
+                         
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(
