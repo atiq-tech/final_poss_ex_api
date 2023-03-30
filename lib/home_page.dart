@@ -14,7 +14,7 @@ import 'package:poss/pages/account_pages/cash_statement_page.dart';
 import 'package:poss/pages/account_pages/cash_transaction.dart';
 import 'package:poss/pages/account_pages/cash_transaction_report_page.dart';
 import 'package:poss/pages/account_pages/cash_view_page.dart';
-import 'package:poss/pages/account_pages/customer_pay_reciev_page.dart';
+import 'package:poss/pages/account_pages/customer_payment_page.dart';
 import 'package:poss/pages/account_pages/supplier_payment_page.dart';
 import 'package:poss/pages/administration_pages/customer_entry_page.dart';
 import 'package:poss/pages/administration_pages/product_entry_page.dart';
@@ -674,7 +674,7 @@ class _HomePageState extends State<HomePage> {
   List accountListPage = [
     CashTransactionPage(),
     BankTransactionPage(),
-    CustomerPayRecivePage(),
+    CustomerPaymentPage(),
     SupplierPaymentPage(),
     CashViewPage(),
     CashTransactionReportPage(),

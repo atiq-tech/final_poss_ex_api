@@ -7,19 +7,19 @@ import 'package:poss/Api_Integration/Api_Modelclass/all_cash_transaction_class.d
 import 'package:poss/const_page.dart';
 
 class ApiAllCashTransactions {
-  static GetApiAllCashTransactions(context,String ?transactionType,String ?accountId ,String ?dateFrom,String ?dateTo) async {
+  static GetApiAllCashTransactions(context, String? transactionType,
+      String? accountId, String? dateFrom, String? dateTo) async {
     String Link = "${BaseUrl}api/v1/getCashTransactions";
     List<AllCashTransactionsClass> allCashTransactionslist = [];
     AllCashTransactionsClass allCashTransactionsClass;
     try {
       Response response = await Dio().post(Link,
           data: {
-            "transactionType":"$transactionType",
-             "accountId": "$accountId",
-              "dateFrom": "$dateFrom",
-              "dateTo": "$dateTo",
-              },
-
+            "transactionType": "$transactionType",
+            "accountId": "$accountId",
+            "dateFrom": "$dateFrom",
+            "dateTo": "$dateTo",
+          },
           options: Options(headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${GetStorage().read("token")}",
@@ -35,7 +35,7 @@ class ApiAllCashTransactions {
         allCashTransactionsClass = AllCashTransactionsClass.fromJson(i);
         allCashTransactionslist.add(allCashTransactionsClass);
       }
-    
+
       print("CashTransactions length is ${allCashTransactionslist.length}");
     } catch (e) {
       print("Something is wrong all CashTransactions list=======:$e");

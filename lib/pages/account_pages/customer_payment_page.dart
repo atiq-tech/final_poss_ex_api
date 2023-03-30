@@ -7,14 +7,13 @@ import 'package:jiffy/jiffy.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/pages/pages_common/custom_pay_receive_add_costomer.dart';
 
-
-class CustomerPayRecivePage extends StatefulWidget {
-  const CustomerPayRecivePage({super.key});
+class CustomerPaymentPage extends StatefulWidget {
+  const CustomerPaymentPage({super.key});
   @override
-  State<CustomerPayRecivePage> createState() => _CustomerPayRecivePageState();
+  State<CustomerPaymentPage> createState() => _CustomerPaymentPageState();
 }
 
-class _CustomerPayRecivePageState extends State<CustomerPayRecivePage> {
+class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
   final TextEditingController _transactionTypeController =
       TextEditingController();
   final TextEditingController _paymentTypeController = TextEditingController();
@@ -347,7 +346,7 @@ class _CustomerPayRecivePageState extends State<CustomerPayRecivePage> {
                           ),
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
-                            flex: 9,
+                            flex: 11,
                             child: Container(
                               height: 30.0,
                               width: MediaQuery.of(context).size.width / 2,
@@ -383,34 +382,6 @@ class _CustomerPayRecivePageState extends State<CustomerPayRecivePage> {
                                       value: location,
                                     );
                                   }).toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5.0),
-                          Expanded(
-                            flex: 2,
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          CustomPayReceiveAddCostom()));
-                                });
-                              },
-                              child: Container(
-                                height: 28.0,
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 7, 125, 180),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromARGB(255, 75, 196, 201),
-                                        width: 1)),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 25.0,
                                 ),
                               ),
                             ),
