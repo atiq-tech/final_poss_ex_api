@@ -3,9 +3,14 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart' as jiffy;
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_add_customer_payment/Api_all_add_customer_payment.dart';
+import 'package:poss/Api_Integration/Api_all_bank_accounts/Api_all_bank_accounts.dart';
+import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
 
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/pages/pages_common/custom_pay_receive_add_costomer.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomerPaymentPage extends StatefulWidget {
   const CustomerPaymentPage({super.key});
@@ -21,6 +26,21 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
   final TextEditingController _DateController = TextEditingController();
   final TextEditingController _DescriptionController = TextEditingController();
   final TextEditingController _AmountController = TextEditingController();
+
+  String? firstPickedDate;
+  void _firstSelectedDate() async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050));
+    if (selectedDate != null) {
+      setState(() {
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
+  }
+
   String? _transactionType;
   List<String> _transactionTypeList = [
     'Deposit',
@@ -60,10 +80,38 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
     'Joy',
     'Musha'
   ];
+  ApiAllBankAccounts? apiAllBankAccounts;
+  ApiAllCustomers? apiAllCustomers;
+  @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    //bank ACCOUNTS
+    ApiAllBankAccounts apiAllBankAccounts;
+    Provider.of<CounterProvider>(context, listen: false)
+        .getBankAccounts(context);
+    //Customers
+    ApiAllCustomers apiAllCustomers;
+    Provider.of<CounterProvider>(context, listen: false).getCustomers(context);
+    // TODO: implement initState
+    super.initState();
+  }
 
-  String? firstPickedDate;
   @override
   Widget build(BuildContext context) {
+    //bank accounts
+    final allBankAccountsData =
+        Provider.of<CounterProvider>(context).allBankAccountlist;
+    print(
+        "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
+    //Customers
+    final allCustomersData =
+        Provider.of<CounterProvider>(context).allCustomerslist;
+    print("Customers new Customers =Lenght is:::::${allCustomersData.length}");
+    //Get Bank Transaction
+    final allGetCustomerPaymentData =
+        Provider.of<CounterProvider>(context).allGetCustomerPaymentlist;
+    print(
+        "GBT GBT GBT GBT GBT GBT GBT GBT GBT =Lenght is:::::${allGetCustomerPaymentData.length}");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
@@ -254,18 +302,20 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                           value: _selectedBank,
                                           onChanged: (newValue) {
                                             setState(() {
-                                              _selectedBank = newValue!;
+                                              _selectedBank =
+                                                  newValue!.toString();
                                             });
                                           },
-                                          items: _bankList.map((location) {
+                                          items: allBankAccountsData
+                                              .map((location) {
                                             return DropdownMenuItem(
                                               child: Text(
-                                                location,
+                                                "${location.bankName}",
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                 ),
                                               ),
-                                              value: location,
+                                              value: location.accountId,
                                             );
                                           }).toList(),
                                         ),
@@ -313,7 +363,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                   value: _customerType,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _customerType = newValue!;
+                                      _customerType = newValue!.toString();
                                     });
                                   },
                                   items: _customerTypeList.map((location) {
@@ -359,6 +409,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  isExpanded: true,
                                   hint: Text(
                                     'Select Customer',
                                     style: TextStyle(
@@ -368,18 +419,18 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                   value: _selectedCustomer,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _selectedCustomer = newValue!;
+                                      _selectedCustomer = newValue!.toString();
                                     });
                                   },
-                                  items: customerList.map((location) {
+                                  items: allCustomersData.map((location) {
                                     return DropdownMenuItem(
                                       child: Text(
-                                        location,
+                                        "${location.customerName}",
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
                                       ),
-                                      value: location,
+                                      value: location.customerSlNo,
                                     );
                                   }).toList(),
                                 ),
@@ -442,46 +493,43 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
                             flex: 11,
-                            child: GestureDetector(
-                              onTap: () async {
-                                final selectedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
-                                    lastDate: DateTime(2050));
-                                if (selectedDate != null) {
-                                  setState(() {
-                                    firstPickedDate = Jiffy(selectedDate)
-                                        .format("dd - MMM - yyyy");
-                                  });
-                                }
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    top: 5, right: 5, bottom: 5),
-                                height: 32,
-                                width: double.infinity,
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 7, 125, 180),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      firstPickedDate == null
-                                          ? Jiffy(DateTime.now())
-                                              .format("dd - MMM - yyyy")
-                                          : firstPickedDate!,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: 5,
+                                top: 5,
+                                bottom: 5,
+                              ),
+                              height: 30,
+                              child: GestureDetector(
+                                onTap: (() {
+                                  _firstSelectedDate();
+                                }),
+                                child: TextFormField(
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 10, left: 10),
+                                    filled: true,
+                                    fillColor: Colors.blue[50],
+                                    suffixIcon: Icon(
+                                      Icons.calendar_month,
+                                      color: Colors.black87,
                                     ),
-                                    Icon(Icons.calendar_month, size: 20)
-                                  ],
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    hintText: firstPickedDate == null
+                                        ? DateFormat('yyyy-MM-dd')
+                                            .format(DateTime.now())
+                                        : firstPickedDate,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14, color: Colors.black87),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return null;
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ),
@@ -573,24 +621,56 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            height: 35.0,
-                            width: 85.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 88, 204, 91),
-                                  width: 2.0),
-                              color: Color.fromARGB(255, 5, 114, 165),
-                              borderRadius: BorderRadius.circular(10.0),
+                          InkWell(
+                            onTap: () {
+                              ApiAllAddCustomerPayment
+                                  .GetApiAllAddCustomerPayment(
+                                context,
+                                "$_selectedBank",
+                                "$_transactionType",
+                                "${_AmountController.text}",
+                                "CPayment_customerID",
+                                "$firstPickedDate",
+                                0,
+                                "${_DescriptionController.text}",
+                                "${_DueController.text}",
+                                "",
+                                //  CPayment_Paymentby,
+                                // CPayment_TransactionType,
+                                // CPayment_amount,
+                                // CPayment_customerID,
+                                // CPayment_date,
+                                // CPayment_id,
+                                // CPayment_notes,
+                                // CPayment_previous_due,
+                                // account_id,
+                              );
+                              Provider.of<CounterProvider>(context,
+                                      listen: false)
+                                  .getGetCustomerPayment(
+                                      context,
+                                      "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+                                      "${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 85.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 88, 204, 91),
+                                    width: 2.0),
+                                color: Color.fromARGB(255, 5, 114, 165),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "SAVE",
+                                style: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              "SAVE",
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
                           ),
                           SizedBox(width: 4.0),
                           Container(
@@ -653,8 +733,6 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        // color: Colors.red,
-                        // padding:EdgeInsets.only(bottom: 16.0),
                         child: DataTable(
                           showCheckboxColumn: true,
                           border:
@@ -681,46 +759,45 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                             DataColumn(
                               label: Center(child: Text('Amount')),
                             ),
-                            DataColumn(
-                              label: Center(child: Text('Action')),
-                            ),
                           ],
                           rows: List.generate(
-                            30,
+                            allGetCustomerPaymentData.length,
                             (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].cPaymentInvoice}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].cPaymentDate}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].customerName}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].customerType}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].transactionType}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].paymentBy}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
-                                ),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.edit)),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.delete))
-                                    ],
-                                  ),
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].outAmount}')),
                                 ),
                               ],
                             ),

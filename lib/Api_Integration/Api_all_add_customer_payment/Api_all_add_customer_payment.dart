@@ -10,40 +10,46 @@ import 'package:poss/const_page.dart';
 class ApiAllAddCustomerPayment {
   static GetApiAllAddCustomerPayment(
     context,
+    String? CPayment_Paymentby,
+    String? CPayment_TransactionType,
+    String? CPayment_amount,
+    String? CPayment_customerID,
+    String? CPayment_date,
+    int? CPayment_id,
+    String? CPayment_notes,
+    String? CPayment_previous_due,
     String? account_id,
-    String? amount,
-    String? note,
-    String? transaction_date,
-    int? transaction_id,
-    String? transaction_type,
   ) async {
     String Link = "${BaseUrl}api/v1/addCustomerPayment";
 
     try {
       Response response = await Dio().post(Link,
           data: {
-          
-            "account_id": "$account_id",
-            "amount": "$amount",
-            "note": "$note",
-            "transaction_date": "$transaction_date",
-            "transaction_id": "$transaction_id",
-            "transaction_type": "$transaction_type",
+            "CPayment_Paymentby": "$CPayment_Paymentby",
+            "CPayment_TransactionType": "$CPayment_TransactionType",
+            "CPayment_amount": "$CPayment_amount",
+            "CPayment_customerID": "$CPayment_customerID",
+            "CPayment_date": "$CPayment_date",
+            "CPayment_id":CPayment_id,
+            "CPayment_notes": "$CPayment_notes",
+            "CPayment_previous_due": "$CPayment_previous_due",
+            "account_id": "$account_id"
           },
           options: Options(headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${GetStorage().read("token")}",
           }));
-      print("Bank Transactions Bank Transactions:::${response.data}");
+      print(
+          "AddCustomerPayment AddCustomerPayment::AddCustomerPayment:${response.data}");
       print("===========++++++=============");
-      print("Add bank Transactions Add bank Transactions");
-      print("============++++++=========");
+      print("AddCustomerPayment AddCustomerPayment AddCustomerPayment");
+      print("============+++++++++++++++=========");
 
       var data = jsonDecode(response.data);
 
-      print("Add bank Transactions length is ${data}");
+      print("Add Customer Payment length is ${data}");
     } catch (e) {
-      print("Something is wrong all Add bank Transactions list=======:$e");
+      print("Something is wrong AAAAdd CCCCustomer PPPayment=======:$e");
     }
   }
 }
