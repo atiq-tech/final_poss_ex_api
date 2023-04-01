@@ -41,29 +41,23 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
     }
   }
 
+  String? _Get_transactionType;
   String? _transactionType;
   List<String> _transactionTypeList = [
-    'Deposit',
-    'Withdraw',
+    'Receive',
+    'Payment',
   ];
 
   bool isBankListClicked = false;
+  String? _Get_paymentType;
   String? _paymentType;
-
   List<String> _paymentTypeList = [
     'Cash',
     'Bank',
   ];
   String? _selectedBank;
-  List<String> _bankList = [
-    'A Bank',
-    'B Bank',
-    'C Bank',
-    'D Bank',
-    'E Bank',
-    'F Bank',
-    'G Bank',
-  ];
+//
+  String? _Get_customerType;
   String? _customerType;
   List<String> _customerTypeList = [
     'Retail',
@@ -127,7 +121,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: Container(
-                  height: 350.0,
+                  height: 325.0,
                   width: double.infinity,
                   padding: EdgeInsets.only(top: 6.0, left: 10.0, right: 8.0),
                   decoration: BoxDecoration(
@@ -175,6 +169,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                   onChanged: (newValue) {
                                     setState(() {
                                       _transactionType = newValue!;
+                                      if (newValue == "Receive") {
+                                        _Get_transactionType = "CR";
+                                      }
+                                      if (newValue == "Payment") {
+                                        _Get_transactionType == "CP";
+                                      }
                                     });
                                   },
                                   items: _transactionTypeList.map((location) {
@@ -233,6 +233,13 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                     onChanged: (newValue) {
                                       setState(() {
                                         _paymentType = newValue!;
+
+                                        // if (newValue == "Cash") {
+                                        //   _Get_paymentType = "cash";
+                                        // }
+                                        // if (newValue == "Bank") {
+                                        //   _Get_paymentType = "bank";
+                                        // }
                                         _paymentType == "Bank"
                                             ? isBankListClicked = true
                                             : isBankListClicked = false;
@@ -363,7 +370,13 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                   value: _customerType,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _customerType = newValue!.toString();
+                                      _customerType = newValue!;
+                                      if (newValue == "Retail") {
+                                        _Get_customerType = "retail";
+                                      }
+                                      if (newValue == "Wholesale") {
+                                        _Get_customerType = "wholesale";
+                                      }
                                     });
                                   },
                                   items: _customerTypeList.map((location) {
@@ -439,47 +452,47 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 5.0),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 6,
-                            child: Text(
-                              "Due",
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 126, 125, 125)),
-                            ),
-                          ),
-                          Expanded(flex: 1, child: Text(":")),
-                          Expanded(
-                            flex: 11,
-                            child: Container(
-                              height: 28.0,
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: TextField(
-                                controller: _DueController,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 5.0, horizontal: 10.0),
-                                  border: InputBorder.none,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 7, 125, 180),
-                                    ),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 7, 125, 180),
-                                    ),
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // SizedBox(height: 5.0),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       flex: 6,
+                      //       child: Text(
+                      //         "Due",
+                      //         style: TextStyle(
+                      //             color: Color.fromARGB(255, 126, 125, 125)),
+                      //       ),
+                      //     ),
+                      //     Expanded(flex: 1, child: Text(":")),
+                      //     Expanded(
+                      //       flex: 11,
+                      //       child: Container(
+                      //         height: 28.0,
+                      //         width: MediaQuery.of(context).size.width / 2,
+                      //         child: TextField(
+                      //           controller: _DueController,
+                      //           decoration: InputDecoration(
+                      //             contentPadding: EdgeInsets.symmetric(
+                      //                 vertical: 5.0, horizontal: 10.0),
+                      //             border: InputBorder.none,
+                      //             focusedBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                 color: Color.fromARGB(255, 7, 125, 180),
+                      //               ),
+                      //               borderRadius: BorderRadius.circular(12.0),
+                      //             ),
+                      //             enabledBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                 color: Color.fromARGB(255, 7, 125, 180),
+                      //               ),
+                      //               borderRadius: BorderRadius.circular(12.0),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
                         children: [
                           Expanded(
@@ -617,7 +630,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 5.0),
+                      SizedBox(height: 8.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -627,9 +640,9 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                   .GetApiAllAddCustomerPayment(
                                 context,
                                 "$_selectedBank",
-                                "$_transactionType",
+                                "$_Get_transactionType",
                                 "${_AmountController.text}",
-                                "CPayment_customerID",
+                                "$_selectedCustomer",
                                 "$firstPickedDate",
                                 0,
                                 "${_DescriptionController.text}",
@@ -673,24 +686,31 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                             ),
                           ),
                           SizedBox(width: 4.0),
-                          Container(
-                            height: 35.0,
-                            width: 85.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 88, 204, 91),
-                                  width: 2.0),
-                              color: Color.fromARGB(255, 252, 33, 4),
-                              borderRadius: BorderRadius.circular(10.0),
+                          InkWell(
+                            onTap: () {
+                              _DescriptionController.text = "";
+
+                              _AmountController.text = "";
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 85.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 88, 204, 91),
+                                    width: 2.0),
+                                color: Color.fromARGB(255, 252, 33, 4),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "CANCEL",
+                                style: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              "CANCEL",
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
                           ),
                         ],
                       ),
@@ -759,6 +779,12 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                             DataColumn(
                               label: Center(child: Text('Amount')),
                             ),
+                            DataColumn(
+                              label: Center(child: Text('Description')),
+                            ),
+                            DataColumn(
+                              label: Center(child: Text('Save By')),
+                            ),
                           ],
                           rows: List.generate(
                             allGetCustomerPaymentData.length,
@@ -797,7 +823,17 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                 DataCell(
                                   Center(
                                       child: Text(
-                                          '${allGetCustomerPaymentData[index].outAmount}')),
+                                          '${allGetCustomerPaymentData[index].cPaymentAmount}')),
+                                ),
+                                DataCell(
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].cPaymentNotes}')),
+                                ),
+                                DataCell(
+                                  Center(
+                                      child: Text(
+                                          '${allGetCustomerPaymentData[index].cPaymentAddby}')),
                                 ),
                               ],
                             ),
