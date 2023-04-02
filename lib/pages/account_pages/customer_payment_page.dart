@@ -173,7 +173,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                         _Get_transactionType = "CR";
                                       }
                                       if (newValue == "Payment") {
-                                        _Get_transactionType == "CP";
+                                        _Get_transactionType = "CP";
                                       }
                                     });
                                   },
@@ -506,6 +506,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
                             flex: 11,
+                            
                             child: Container(
                               margin: EdgeInsets.only(
                                 right: 5,
@@ -546,6 +547,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                 ),
                               ),
                             ),
+                          
                           ),
                         ],
                       ),
@@ -639,7 +641,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                               ApiAllAddCustomerPayment
                                   .GetApiAllAddCustomerPayment(
                                 context,
-                                "$_selectedBank",
+                                "$_paymentType",
                                 "$_Get_transactionType",
                                 "${_AmountController.text}",
                                 "$_selectedCustomer",
@@ -657,6 +659,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                 // CPayment_notes,
                                 // CPayment_previous_due,
                                 // account_id,
+
                               );
                               Provider.of<CounterProvider>(context,
                                       listen: false)
@@ -718,28 +721,29 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Container(
-                  height: 40.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      border: Border.all(color: Colors.black38, width: 1)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            /* Clear the search field */
-                          },
-                        ),
-                        hintText: 'Filter...',
-                        border: InputBorder.none),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              //   child: Container(
+              //     height: 40.0,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(8.0),
+              //         border: Border.all(color: Colors.black38, width: 1)),
+              //     child: TextField(
+              //       decoration: InputDecoration(
+              //           prefixIcon: const Icon(Icons.search),
+              //           suffixIcon: IconButton(
+              //             icon: const Icon(Icons.clear),
+              //             onPressed: () {
+              //               /* Clear the search field */
+              //             },
+              //           ),
+              //           hintText: 'Filter...',
+              //           border: InputBorder.none),
+              //     ),
+              //   ),
+              // ),
+
               SizedBox(height: 10.0),
               Container(
                 height: MediaQuery.of(context).size.height / 1.43,

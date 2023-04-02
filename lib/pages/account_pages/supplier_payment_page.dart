@@ -4,8 +4,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart' as jiffy;
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/pages/pages_common/supplier_page.dart';
+import 'package:poss/providers/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 class SupplierPaymentPage extends StatefulWidget {
   const SupplierPaymentPage({super.key});
@@ -23,6 +26,21 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
   final TextEditingController _paymentDateController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
+  //
+  String? firstPickedDate;
+  void _firstSelectedDate() async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050));
+    if (selectedDate != null) {
+      setState(() {
+        firstPickedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
+  }
+
   String? _transactionType;
   List<String> _transactionTypeList = [
     'Receive',
@@ -46,19 +64,22 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
     'G Bank',
   ];
   String? _selectedSupplier;
-  List<String> SupplierList = [
-    'Ahmed Shezad',
-    'Nitish',
-    'Maruf',
-    'Mehedi',
-    'Nahid',
-    'Nuzmul',
-    'Joy',
-    'Musha'
-  ];
-  String? firstPickedDate;
+  ApiAllSuppliers? apiAllSuppliers;
+  @override
+  void initState() {
+    firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    ApiAllSuppliers apiAllSuppliers;
+    Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Suppliers
+    final allSuppliersData =
+        Provider.of<CounterProvider>(context).allSupplierslist;
+    print("Suppliers payment list length is==  ${allSuppliersData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Supplier Payment"),
       body: InkWell(
@@ -272,7 +293,7 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 7,
+                            flex: 6,
                             child: Text(
                               "Supplier",
                               style: TextStyle(
@@ -294,6 +315,7 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  isExpanded: true,
                                   hint: Text(
                                     'Select Supplier',
                                     style: TextStyle(
@@ -303,47 +325,20 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                                   value: _selectedSupplier,
                                   onChanged: (newValue) {
                                     setState(() {
-                                      _selectedSupplier = newValue!;
+                                      _selectedSupplier = newValue!.toString();
                                     });
                                   },
-                                  items: SupplierList.map((location) {
+                                  items: allSuppliersData.map((location) {
                                     return DropdownMenuItem(
                                       child: Text(
-                                        location,
+                                        "${location.supplierName}",
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
                                       ),
-                                      value: location,
+                                      value: location.supplierSlNo,
                                     );
                                   }).toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 2.0),
-                          Expanded(
-                            flex: 2,
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => SupplierPage()));
-                                });
-                              },
-                              child: Container(
-                                height: 28.0,
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 7, 125, 180),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                        color:
-                                            Color.fromARGB(255, 75, 196, 201),
-                                        width: 1)),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 25.0,
                                 ),
                               ),
                             ),
@@ -402,46 +397,43 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                           Expanded(flex: 1, child: Text(":")),
                           Expanded(
                             flex: 11,
-                            child: GestureDetector(
-                              onTap: () async {
-                                final selectedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1950),
-                                    lastDate: DateTime(2050));
-                                if (selectedDate != null) {
-                                  setState(() {
-                                    firstPickedDate = Jiffy(selectedDate)
-                                        .format("dd - MMM - yyyy");
-                                  });
-                                }
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                    top: 5, right: 5, bottom: 5),
-                                height: 32,
-                                width: double.infinity,
-                                padding: EdgeInsets.only(
-                                    top: 5, bottom: 5, left: 5, right: 5),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Color.fromARGB(255, 7, 125, 180),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      firstPickedDate == null
-                                          ? Jiffy(DateTime.now())
-                                              .format("dd - MMM - yyyy")
-                                          : firstPickedDate!,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: 5,
+                                top: 5,
+                                bottom: 5,
+                              ),
+                              height: 30,
+                              child: GestureDetector(
+                                onTap: (() {
+                                  _firstSelectedDate();
+                                }),
+                                child: TextFormField(
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 10, left: 10),
+                                    filled: true,
+                                    fillColor: Colors.blue[50],
+                                    suffixIcon: Icon(
+                                      Icons.calendar_month,
+                                      color: Colors.black87,
                                     ),
-                                    Icon(Icons.calendar_month, size: 20)
-                                  ],
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    hintText: firstPickedDate == null
+                                        ? DateFormat('yyyy-MM-dd')
+                                            .format(DateTime.now())
+                                        : firstPickedDate,
+                                    hintStyle: TextStyle(
+                                        fontSize: 14, color: Colors.black87),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return null;
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ),
