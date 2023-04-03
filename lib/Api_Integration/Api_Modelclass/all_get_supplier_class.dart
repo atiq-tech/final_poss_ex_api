@@ -21,7 +21,7 @@ class AllGetSupplierClass {
   String? updateTime;
   String? supplierBrinchid;
   String? displayName;
-
+//
   AllGetSupplierClass(
       {this.supplierSlNo,
       this.supplierCode,

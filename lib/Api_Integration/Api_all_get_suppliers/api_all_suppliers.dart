@@ -26,7 +26,7 @@ class ApiAllSuppliers {
       for (var i in data) {
         allSuppliersClass = AllSuppliersClass.fromJson(i);
         allSupplierslist.add(allSuppliersClass);
-        print(allSupplierslist);
+       
       }
     } catch (e) {
       print("Something is wrong:$e");

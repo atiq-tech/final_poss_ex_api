@@ -28,7 +28,7 @@ class ApiAllGetCustomerPayments {
       print("GetCustomerPayments::GetCustomerPayments:${response.data}");
       print("===========++++++=============");
       print("GetCustomerPayments GetCustomerPayments");
-      print("============++++++=========");
+     
 
       var data = jsonDecode(response.data);
       print(

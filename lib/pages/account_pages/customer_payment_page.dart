@@ -64,16 +64,6 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
     'Wholesale',
   ];
   String? _selectedCustomer;
-  List<String> customerList = [
-    'Atiq',
-    'Nitish',
-    'Maruf',
-    'Mehedi',
-    'Nahid',
-    'Nuzmul',
-    'Joy',
-    'Musha'
-  ];
   ApiAllBankAccounts? apiAllBankAccounts;
   ApiAllCustomers? apiAllCustomers;
   @override
@@ -101,7 +91,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
     final allCustomersData =
         Provider.of<CounterProvider>(context).allCustomerslist;
     print("Customers new Customers =Lenght is:::::${allCustomersData.length}");
-    //Get Bank Transaction
+    //Get Customer Payment
     final allGetCustomerPaymentData =
         Provider.of<CounterProvider>(context).allGetCustomerPaymentlist;
     print(

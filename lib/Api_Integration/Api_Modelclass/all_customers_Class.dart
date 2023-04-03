@@ -23,7 +23,7 @@ class AllCustomersClass {
   String? customerBrunchid;
   String? districtName;
   String? displayName;
-
+//
   AllCustomersClass(
       {this.customerSlNo,
       this.customerCode,

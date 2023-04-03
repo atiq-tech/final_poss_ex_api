@@ -53,6 +53,7 @@ class AllGetCustomerPaymentClass {
       this.bankName,
       this.transactionType,
       this.paymentBy});
+      
 
   AllGetCustomerPaymentClass.fromJson(Map<String, dynamic> json) {
     cPaymentId = json['CPayment_id'];

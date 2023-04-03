@@ -22,6 +22,7 @@ class AllSuppliersClass {
   String? supplierBrinchid;
   String? displayName;
 
+
   AllSuppliersClass(
       {this.supplierSlNo,
       this.supplierCode,

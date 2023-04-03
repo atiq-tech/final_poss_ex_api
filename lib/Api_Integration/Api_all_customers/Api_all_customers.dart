@@ -20,7 +20,7 @@ class ApiAllCustomers {
       print("Customers daaaaaaaaaaaaaaaaaataaaaaaaaaaaaa:::${Response.body}");
       print("======================");
       print("++++++++++++++++++++++++++");
-      print("======================");
+ 
 
       var data = jsonDecode(Response.body);
       print("+++++====+++++customer all++++===data;;;;;: ${data}");

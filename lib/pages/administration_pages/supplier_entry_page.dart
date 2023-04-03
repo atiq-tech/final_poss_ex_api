@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:poss/Api_Integration/Api_all_add_supplier/Api_all_add_supplier.dart';
+import 'package:poss/Api_Integration/Api_all_add_supplier_payment/Api_all_add_supplier_payment.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/const_page.dart';
 import 'package:poss/providers/counter_provider.dart';

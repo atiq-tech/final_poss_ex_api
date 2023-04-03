@@ -11,6 +11,7 @@ import 'package:poss/Api_Integration/Api_Modelclass/all_get_bank_transaction_cla
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_cash_transaction_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_customer_payment_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_get_supplier_class.dart';
+import 'package:poss/Api_Integration/Api_Modelclass/all_get_supplier_payment_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_product_ledger_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_products_class.dart';
 import 'package:poss/Api_Integration/Api_Modelclass/all_supplier_due_class.dart';
@@ -26,6 +27,7 @@ import 'package:poss/Api_Integration/Api_all_customers/Api_all_customers.dart';
 import 'package:poss/Api_Integration/Api_all_get_bank_transaction/Api_all_get_bank_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_get_cash_transaction/Api_all_get_cash_transaction.dart';
 import 'package:poss/Api_Integration/Api_all_get_customer_payment/Api_all_get_customer_payment.dart';
+import 'package:poss/Api_Integration/Api_all_get_supplier_payment/Api_all_get_supplier_payment.dart';
 import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
 import 'package:poss/Api_Integration/Api_all_newget_supplier/Api_all_newget_supplier.dart';
 import 'package:poss/Api_Integration/Api_all_products/api_all_products.dart';
@@ -181,6 +183,15 @@ class CounterProvider extends ChangeNotifier {
   getGetCustomerPayment(context, String? dateFrom, String? dateTo) async {
     allGetCustomerPaymentlist =
         await ApiAllGetCustomerPayments.GetApiAllGetCustomerPayments(
+            context, dateFrom, dateTo);
+    notifyListeners();
+  }
+
+  //Get Supplier Payment
+  List<AllGetSupplierPaymentClass> allGetSupplierPaymentlist = [];
+  getGetSupplierPayment(context, String? dateFrom, String? dateTo) async {
+    allGetSupplierPaymentlist =
+        await ApiAllGetSupplierPayments.GetApiAllGetSupplierPayments(
             context, dateFrom, dateTo);
     notifyListeners();
   }

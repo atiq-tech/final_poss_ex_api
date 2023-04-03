@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart' as jiffy;
 import 'package:jiffy/jiffy.dart';
+import 'package:poss/Api_Integration/Api_all_add_supplier_payment/Api_all_add_supplier_payment.dart';
+import 'package:poss/Api_Integration/Api_all_bank_accounts/Api_all_bank_accounts.dart';
 import 'package:poss/Api_Integration/Api_all_get_suppliers/api_all_suppliers.dart';
 import 'package:poss/common_widget/custom_appbar.dart';
 import 'package:poss/pages/pages_common/supplier_page.dart';
@@ -41,14 +43,15 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
     }
   }
 
+  String? _Get_transactionType;
   String? _transactionType;
   List<String> _transactionTypeList = [
     'Receive',
     'Payment',
   ];
   bool isBankListClicked = false;
+  String? _Get_paymentType;
   String? _paymentType;
-
   List<String> _paymentTypeList = [
     'Cash',
     'Bank',
@@ -64,10 +67,16 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
     'G Bank',
   ];
   String? _selectedSupplier;
+  ApiAllBankAccounts? apiAllBankAccounts;
   ApiAllSuppliers? apiAllSuppliers;
   @override
   void initState() {
     firstPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    //bank ACCOUNTS
+    ApiAllBankAccounts apiAllBankAccounts;
+    Provider.of<CounterProvider>(context, listen: false)
+        .getBankAccounts(context);
+    // Suppliers
     ApiAllSuppliers apiAllSuppliers;
     Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
     // TODO: implement initState
@@ -76,10 +85,20 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    //bank accounts
+    final allBankAccountsData =
+        Provider.of<CounterProvider>(context).allBankAccountlist;
+    print(
+        "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
     // Suppliers
     final allSuppliersData =
         Provider.of<CounterProvider>(context).allSupplierslist;
     print("Suppliers payment list length is==  ${allSuppliersData.length}");
+    //Get Supplier Payment
+    final allGetSupplierPaymentData =
+        Provider.of<CounterProvider>(context).allGetSupplierPaymentlist;
+    print(
+        "GSP GSP GSP GSP GSP GSP GSP GSP GSP GSP=Lenght is:::::${allGetSupplierPaymentData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Supplier Payment"),
       body: InkWell(
@@ -140,6 +159,12 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                                   onChanged: (newValue) {
                                     setState(() {
                                       _transactionType = newValue!;
+                                      if (newValue == "Receive") {
+                                        _Get_transactionType = "CR";
+                                      }
+                                      if (newValue == "Payment") {
+                                        _Get_transactionType = "CP";
+                                      }
                                     });
                                   },
                                   items: _transactionTypeList.map((location) {
@@ -267,18 +292,20 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                                           value: _selectedBank,
                                           onChanged: (newValue) {
                                             setState(() {
-                                              _selectedBank = newValue!;
+                                              _selectedBank =
+                                                  newValue!.toString();
                                             });
                                           },
-                                          items: _bankList.map((location) {
+                                          items: allBankAccountsData
+                                              .map((location) {
                                             return DropdownMenuItem(
                                               child: Text(
-                                                location,
+                                                "${location.bankName}",
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                 ),
                                               ),
-                                              value: location,
+                                              value: location.accountId,
                                             );
                                           }).toList(),
                                         ),
@@ -346,44 +373,44 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                         ],
                       ),
                       SizedBox(height: 3.0),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 6,
-                            child: Text(
-                              "Due",
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 126, 125, 125)),
-                            ),
-                          ),
-                          Expanded(flex: 1, child: Text(":")),
-                          Expanded(
-                            flex: 11,
-                            child: Container(
-                              height: 28.0,
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: TextField(
-                                controller: _DuoController,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 7, 125, 180),
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 7, 125, 180),
-                                    ),
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       flex: 6,
+                      //       child: Text(
+                      //         "Due",
+                      //         style: TextStyle(
+                      //             color: Color.fromARGB(255, 126, 125, 125)),
+                      //       ),
+                      //     ),
+                      //     Expanded(flex: 1, child: Text(":")),
+                      //     Expanded(
+                      //       flex: 11,
+                      //       child: Container(
+                      //         height: 28.0,
+                      //         width: MediaQuery.of(context).size.width / 2,
+                      //         child: TextField(
+                      //           controller: _DuoController,
+                      //           decoration: InputDecoration(
+                      //             border: InputBorder.none,
+                      //             focusedBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                 color: Color.fromARGB(255, 7, 125, 180),
+                      //               ),
+                      //               borderRadius: BorderRadius.circular(10.0),
+                      //             ),
+                      //             enabledBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                 color: Color.fromARGB(255, 7, 125, 180),
+                      //               ),
+                      //               borderRadius: BorderRadius.circular(10.0),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
                         children: [
                           Expanded(
@@ -521,44 +548,80 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            height: 35.0,
-                            width: 85.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 88, 204, 91),
-                                  width: 2.0),
-                              color: Color.fromARGB(255, 5, 114, 165),
-                              borderRadius: BorderRadius.circular(10.0),
+                          InkWell(
+                            onTap: () {
+                              ApiAllAddSupplierPayment
+                                  .GetApiAllAddSupplierPayment(
+                                context,
+                                "$_paymentType",
+                                "$_Get_transactionType",
+                                "${_amountController.text}",
+                                "$_selectedSupplier",
+                                "$firstPickedDate",
+                                0,
+                                "${_descriptionController.text}",
+                                "",
+                                // SPayment_Paymentby,
+                                // SPayment_TransactionType,
+                                // SPayment_amount,
+                                // SPayment_customerID,
+                                // SPayment_date,
+                                // SPayment_id,
+                                // SPayment_notes,
+                                // account_id,
+                              );
+                              Provider.of<CounterProvider>(context,
+                                      listen: false)
+                                  .getGetSupplierPayment(
+                                      context,
+                                      "${DateFormat('yyyy-MM-dd').format(DateTime.now())}",
+                                      "${DateFormat('yyyy-MM-dd').format(DateTime.now())}");
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 85.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 88, 204, 91),
+                                    width: 2.0),
+                                color: Color.fromARGB(255, 5, 114, 165),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "SAVE",
+                                style: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              "SAVE",
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
                           ),
                           SizedBox(width: 4.0),
-                          Container(
-                            height: 35.0,
-                            width: 85.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color.fromARGB(255, 88, 204, 91),
-                                  width: 2.0),
-                              color: Color.fromARGB(255, 252, 33, 4),
-                              borderRadius: BorderRadius.circular(10.0),
+                          InkWell(
+                            onTap: () {
+                              _descriptionController.text = "";
+                              _amountController.text = "";
+                            },
+                            child: Container(
+                              height: 35.0,
+                              width: 85.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color.fromARGB(255, 88, 204, 91),
+                                    width: 2.0),
+                                color: Color.fromARGB(255, 252, 33, 4),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                "CANCEL",
+                                style: TextStyle(
+                                    letterSpacing: 1.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              )),
                             ),
-                            child: Center(
-                                child: Text(
-                              "CANCEL",
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                            )),
                           ),
                         ],
                       ),
@@ -627,42 +690,55 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                               label: Center(child: Text('Amount')),
                             ),
                             DataColumn(
-                              label: Center(child: Text('Action')),
+                              label: Center(child: Text('Description')),
+                            ),
+                            DataColumn(
+                              label: Center(child: Text('Save By')),
                             ),
                           ],
                           rows: List.generate(
-                            30,
+                            allGetSupplierPaymentData.length,
                             (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].sPaymentInvoice}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].sPaymentDate}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].supplierName}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].transactionType}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].paymentBy}')),
                                 ),
                                 DataCell(
-                                  Center(child: Text('Row $index')),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].sPaymentAmount}')),
                                 ),
                                 DataCell(
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.edit)),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.delete))
-                                    ],
-                                  ),
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].sPaymentNotes}')),
+                                ),
+                                DataCell(
+                                  Center(
+                                      child: Text(
+                                          '${allGetSupplierPaymentData[index].sPaymentAddby}')),
                                 ),
                               ],
                             ),
