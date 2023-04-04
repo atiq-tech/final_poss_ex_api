@@ -39,9 +39,7 @@ class ApiAllAddCashTransactions {
             "Authorization": "Bearer ${GetStorage().read("token")}",
           }));
       print("CashTransactions CashTransactions:::${response.data}");
-      print("===========++++++=============");
-      print("Add CashTransactions Add CashTransactions");
-      print("============++++++=========");
+
     } catch (e) {
       print("Something is wrong all Add CashTransactions list=======:$e");
     }

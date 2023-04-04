@@ -639,7 +639,7 @@ class _CustomerPaymentPageState extends State<CustomerPaymentPage> {
                                 0,
                                 "${_DescriptionController.text}",
                                 "${_DueController.text}",
-                                "",
+                                "$_selectedBank",
                                 //  CPayment_Paymentby,
                                 // CPayment_TransactionType,
                                 // CPayment_amount,

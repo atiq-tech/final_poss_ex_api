@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class ApiAllCustomers {
   static GetApiAllCustomers(context) async {
-    //String Link = "${BaseUrl}api/v1/getCustomers";
+  
     List<AllCustomersClass> allCustomerslist = [];
     AllCustomersClass allCustomersClass;
     try {
@@ -27,7 +27,7 @@ class ApiAllCustomers {
       for (var i in data) {
         allCustomersClass = AllCustomersClass.fromJson(i);
         allCustomerslist.add(allCustomersClass);
-        // print(allCustomerslist);
+      
       }
     } catch (e) {
       print("Something is wrong all Customers list=======:$e");

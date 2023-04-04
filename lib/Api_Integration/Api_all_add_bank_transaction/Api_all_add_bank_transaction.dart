@@ -35,9 +35,7 @@ class ApiAllAddBankTransactions {
             "Authorization": "Bearer ${GetStorage().read("token")}",
           }));
       print("Bank Transactions Bank Transactions:::${response.data}");
-      print("===========++++++=============");
-      print("Add bank Transactions Add bank Transactions");
-      print("============++++++=========");
+
 
       var data = jsonDecode(response.data);
 

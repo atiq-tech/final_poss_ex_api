@@ -41,9 +41,7 @@ class ApiAllAddCustomerPayment {
           }));
       print(
           "AddCustomerPayment AddCustomerPayment::AddCustomerPayment:${response.data}");
-      print("===========++++++=============");
-      print("Add Customer Payment AddCustomerPayment AddCustomerPayment");
-      print("============+++++++++++++++=========");
+  
 
       var data = jsonDecode(response.data);
 

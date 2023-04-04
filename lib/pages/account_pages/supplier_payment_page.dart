@@ -560,7 +560,7 @@ class _SupplierPaymentPageState extends State<SupplierPaymentPage> {
                                 "$firstPickedDate",
                                 0,
                                 "${_descriptionController.text}",
-                                "",
+                                "$_selectedBank",
                                 // SPayment_Paymentby,
                                 // SPayment_TransactionType,
                                 // SPayment_amount,
