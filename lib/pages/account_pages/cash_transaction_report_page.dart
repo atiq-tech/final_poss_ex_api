@@ -80,12 +80,11 @@ class _CashTransactionReportPageState extends State<CashTransactionReportPage> {
         Provider.of<CounterProvider>(context).allAccountslist;
     print(
         "Accounts Accounts Accounts =Lenght is:::::${allAccountsData.length}");
-    //
     //Cash Transaction
     final allCashTransactionData =
         Provider.of<CounterProvider>(context).allCashTransactionslist;
     print(
-        "CT CT CT CT CT CT CT CT CT CT CT=Lenght is:::::${allCashTransactionData.length}");
+        "CT CT CT CT CT CT CT =Lenght is:::::${allCashTransactionData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Cash Transaction Report"),
       body: SingleChildScrollView(

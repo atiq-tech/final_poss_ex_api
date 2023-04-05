@@ -84,12 +84,12 @@ class _BankTransactionReportPageState extends State<BankTransactionReportPage> {
     final allBankAccountsData =
         Provider.of<CounterProvider>(context).allBankAccountlist;
     print(
-        "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
+        "BankAccounts Accounts  =Lenght is:::::${allBankAccountsData.length}");
     //bank transactions
     final allBankTransactionData =
         Provider.of<CounterProvider>(context).allBankTransactionslist;
     print(
-        "BT BT BT BT BT BT BT BT BT BT =Lenght is:::::${allBankAccountsData.length}");
+        "BT BT BT BT BT BT  =Lenght is:::::${allBankAccountsData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Bank Transaction Report"),
       body: SingleChildScrollView(

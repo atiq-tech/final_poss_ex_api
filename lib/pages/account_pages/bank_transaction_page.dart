@@ -65,12 +65,12 @@ class _BankTransactionPageState extends State<BankTransactionPage> {
     final allBankAccountsData =
         Provider.of<CounterProvider>(context).allBankAccountlist;
     print(
-        "BankAccounts Accounts bank Accounts =Lenght is:::::${allBankAccountsData.length}");
+        "BankAccounts Accounts =Lenght is:::::${allBankAccountsData.length}");
     //Get Bank Transaction
     final allGetBankTransactionData =
         Provider.of<CounterProvider>(context).allGetBankTransactionslist;
     print(
-        "GBT GBT GBT GBT GBT GBT GBT GBT GBT =Lenght is:::::${allGetBankTransactionData.length}");
+        "GBT GBT GBT GBT GBT GBT =Lenght is:::::${allGetBankTransactionData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Bank Transaction"),
       body: InkWell(
