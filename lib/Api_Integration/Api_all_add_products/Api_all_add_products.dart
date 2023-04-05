@@ -39,7 +39,6 @@ class ApiAllAddSupplierPayment {
             "brand": "",
             "is_service": true,
             "vat": "5"
-      
           },
           options: Options(headers: {
             "Content-Type": "application/json",
@@ -47,10 +46,7 @@ class ApiAllAddSupplierPayment {
           }));
       print(
           "AddSupplierPayment AddSupplierPayment::AddSupplierPayment:${response.data}");
- 
-
       var data = jsonDecode(response.data);
-
       print("Add Supplier Payment length is ${data}");
     } catch (e) {
       print("Something is wrong AAAAdd Supplier PPPayment=======:$e");

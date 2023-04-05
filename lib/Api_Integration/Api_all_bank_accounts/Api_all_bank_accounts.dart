@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 
 class ApiAllBankAccounts {
   static GetApiAllBankAccounts(context) async {
-    
     List<AllBankAccountModelClass> allBankAccountlist = [];
     AllBankAccountModelClass allBankAccountModelClass;
     try {
@@ -19,7 +18,7 @@ class ApiAllBankAccounts {
             "Authorization": "Bearer ${GetStorage().read("token")}",
           },
           body: {});
-      print("Accounts BankAccounts Accounts daaaaaaaaaaaaaaaaaataaaaaaaaaaaaa:::${Response.body}");
+      print("Accounts BankAccounts Accounts data:::${Response.body}");
       print("BankAccounts Accounts BankAccounts");
       print("++++++++++++++++++++++++++");
       print("Accounts BankAccounts Accounts");

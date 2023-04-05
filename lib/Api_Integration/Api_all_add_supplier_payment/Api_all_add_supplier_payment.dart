@@ -31,15 +31,6 @@ class ApiAllAddSupplierPayment {
             "SPayment_id": SPayment_id,
             "SPayment_notes": "$SPayment_notes",
             "account_id": "$account_id"
-            // "CPayment_Paymentby": "$CPayment_Paymentby",
-            // "CPayment_TransactionType": "$CPayment_TransactionType",
-            // "CPayment_amount": "$CPayment_amount",
-            // "CPayment_customerID": "$CPayment_customerID",
-            // "CPayment_date": "$CPayment_date",
-            // "CPayment_id":CPayment_id,
-            // "CPayment_notes": "$CPayment_notes",
-            // "CPayment_previous_due": "$CPayment_previous_due",
-            // "account_id": "$account_id"
           },
           options: Options(headers: {
             "Content-Type": "application/json",
