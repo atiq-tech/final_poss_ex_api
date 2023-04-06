@@ -22,7 +22,7 @@ class _Customer_Due_ListState extends State<Customer_Due_List> {
     return Scaffold(
       appBar: CustomAppBar(title: "Customer Due"),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
+        
         children: [
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
@@ -62,7 +62,7 @@ class _Customer_Due_ListState extends State<Customer_Due_List> {
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
-                                ), // Not necessary for Option 1
+                                ), 
                                 value: _selectedTypes,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -103,8 +103,7 @@ class _Customer_Due_ListState extends State<Customer_Due_List> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
+                   
                       child: DataTable(
                         showCheckboxColumn: true,
                         border: TableBorder.all(color: Colors.black54, width: 1),
@@ -181,8 +180,7 @@ class _Customer_Due_ListState extends State<Customer_Due_List> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // color: Colors.red,
-                      // padding:EdgeInsets.only(bottom: 16.0),
+                 
                       child: DataTable(
                         showCheckboxColumn: true,
                         border: TableBorder.all(color: Colors.black54, width: 1),

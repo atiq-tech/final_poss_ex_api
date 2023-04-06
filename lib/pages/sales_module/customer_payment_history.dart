@@ -42,7 +42,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
     return Scaffold(
       appBar: CustomAppBar(title: "Customer Payment history"),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
+      
         children: [
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
@@ -82,7 +82,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
-                                ), // Not necessary for Option 1
+                                ),
                                 value: _selectedTypes,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -143,7 +143,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
                                 style: TextStyle(
                                   fontSize: 14,
                                 ),
-                              ), // Not necessary for Option 1
+                              ), 
                               value: _selectedCategory,
                               onChanged: (newValue) {
                                 setState(() {
@@ -275,9 +275,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
                     scrollDirection: Axis.vertical,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Container(
-                        // color: Colors.red,
-                        // padding:EdgeInsets.only(bottom: 16.0),
+                      child: Container(                     
                         child: DataTable(
                           showCheckboxColumn: true,
                           border: TableBorder.all(color: Colors.black54,width: 1),
@@ -334,8 +332,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        // color: Colors.red,
-                        // padding:EdgeInsets.only(bottom: 16.0),
+                      
                         child: DataTable(
                           showCheckboxColumn: true,
                           border: TableBorder.all(color: Colors.black54,width: 1),

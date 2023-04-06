@@ -110,7 +110,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
     return Scaffold(
       appBar: CustomAppBar(title: "Sales Record"),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
+       
         children: [
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
@@ -150,7 +150,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
-                                ), // Not necessary for Option 1
+                                ),
                                 value: _selectedSearchTypes,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -234,7 +234,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
-                                    ), // Not necessary for Option 1
+                                    ), 
                                     value: _selectedRecordTypes,
                                     onChanged: (newValue) {
                                       setState(() {
@@ -301,7 +301,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
-                                      ), // Not necessary for Option 1
+                                      ), 
                                       value: _selectedCustomerTypes,
                                       onChanged: (newValue) {
                                         setState(() {
@@ -483,7 +483,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),
-                                      ), // Not necessary for Option 1
+                                      ), 
                                       value: _selectedEmployeeTypes,
                                       onChanged: (newValue) {
                                         setState(() {

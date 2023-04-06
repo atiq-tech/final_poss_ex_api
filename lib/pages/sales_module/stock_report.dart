@@ -15,7 +15,12 @@ class _StockReportPageState extends State<StockReportPage> {
   bool isProductWiseClicked = false;
   double thFontSize = 10.0;
   String data = '';
-  List<String> _types = ['Current Stock', 'Total Stock', 'Category Wise Stock', 'Product Wise Stock'];
+  List<String> _types = [
+    'Current Stock',
+    'Total Stock',
+    'Category Wise Stock',
+    'Product Wise Stock'
+  ];
 
   List<String> _category = [
     'A',
@@ -44,7 +49,6 @@ class _StockReportPageState extends State<StockReportPage> {
     return Scaffold(
       appBar: CustomAppBar(title: "Stock Report"),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
@@ -84,7 +88,7 @@ class _StockReportPageState extends State<StockReportPage> {
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
-                                ), // Not necessary for Option 1
+                                ),
                                 value: _selectedTypes,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -149,7 +153,7 @@ class _StockReportPageState extends State<StockReportPage> {
                                       style: TextStyle(
                                         fontSize: 14,
                                       ),
-                                    ), // Not necessary for Option 1
+                                    ),
                                     value: _selectedCategory,
                                     onChanged: (newValue) {
                                       setState(() {
@@ -277,65 +281,9 @@ class _StockReportPageState extends State<StockReportPage> {
           Divider(
             color: Color.fromARGB(255, 92, 90, 90),
           ),
-          if( data == 'current stock')
+          if (data == 'current stock')
             Container(
-             height: MediaQuery.of(context).size.height/1.31,
-            width: double.infinity,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    // color: Colors.red,
-                    // padding:EdgeInsets.only(bottom: 16.0),
-                    child: DataTable(
-                      showCheckboxColumn: true,
-                      border: TableBorder.all(color: Colors.black54,width: 1),
-                      columns: [
-                        DataColumn(
-                          label: Center(child: Text('Product Id')),
-                        ),
-                        DataColumn(
-                          label: Center(child: Text('Product Name')),
-                        ),
-                        DataColumn(
-                          label: Center(child: Text('Current Quantity')),
-                        ),
-                        DataColumn(
-                          label: Center(child: Text('Stock Value')),
-                        ),
-                      ],
-                      rows: List.generate(
-                        30,
-                            (int index) => DataRow(
-                          cells: <DataCell>[
-                            DataCell(
-                              Center(child: Text('Row $index')),
-                            ),
-                            DataCell(
-                              Center(child: Text('Row $index')),
-                            ),
-                            DataCell(
-                              Center(child: Text('Row $index')),
-                            ),
-                            DataCell(
-                              Center(child: Text('Row $index')),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
-          else if(data == 'Total Stock')
-            Container(
-              height: MediaQuery.of(context).size.height/1.31,
+              height: MediaQuery.of(context).size.height / 1.31,
               width: double.infinity,
               child: Container(
                 width: double.infinity,
@@ -349,7 +297,65 @@ class _StockReportPageState extends State<StockReportPage> {
                       // padding:EdgeInsets.only(bottom: 16.0),
                       child: DataTable(
                         showCheckboxColumn: true,
-                        border: TableBorder.all(color: Colors.black54,width: 1),
+                        border:
+                            TableBorder.all(color: Colors.black54, width: 1),
+                        columns: [
+                          DataColumn(
+                            label: Center(child: Text('Product Id')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Product Name')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Current Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Stock Value')),
+                          ),
+                        ],
+                        rows: List.generate(
+                          30,
+                          (int index) => DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          else if (data == 'Total Stock')
+            Container(
+              height: MediaQuery.of(context).size.height / 1.31,
+              width: double.infinity,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      // color: Colors.red,
+                      // padding:EdgeInsets.only(bottom: 16.0),
+                      child: DataTable(
+                        showCheckboxColumn: true,
+                        border:
+                            TableBorder.all(color: Colors.black54, width: 1),
                         columns: [
                           DataColumn(
                             label: Center(child: Text('Product Id')),
@@ -360,33 +366,78 @@ class _StockReportPageState extends State<StockReportPage> {
                           DataColumn(
                             label: Center(child: Text('Production Quantit')),
                           ),
-                          DataColumn(label: Center(child: Text('Purchased Quantity')),),
-                          DataColumn(label: Center(child: Text('Purchase Returned Quantity')),),
-                          DataColumn(label: Center(child: Text('Damaged Quantity')),),
-                          DataColumn(label: Center(child: Text('Sold Quantity')),),
-                          DataColumn(label: Center(child: Text('Sales Returned Quantity')),),
-                          DataColumn(label: Center(child: Text('Transferred In Quantity')),),
-                          DataColumn(label: Center(child: Text('Transferred Out Quantity')),),
-                          DataColumn(label: Center(child: Text('Current Quantity')),),
-                          DataColumn(label: Center(child: Text('Stock Value')),),
+                          DataColumn(
+                            label: Center(child: Text('Purchased Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(
+                                child: Text('Purchase Returned Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Damaged Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Sold Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Sales Returned Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Transferred In Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Transferred Out Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Current Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Stock Value')),
+                          ),
                         ],
                         rows: List.generate(
                           30,
-                              (int index) => DataRow(
+                          (int index) => DataRow(
                             cells: <DataCell>[
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-                              DataCell(Center(child: Text('Row $index')),),
-
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
                             ],
                           ),
                         ),
@@ -396,120 +447,224 @@ class _StockReportPageState extends State<StockReportPage> {
                 ),
               ),
             )
-          else if(data == 'Category Wise Stock')
-              Container(
-                height: MediaQuery.of(context).size.height/1.43,
+          else if (data == 'Category Wise Stock')
+            Container(
+              height: MediaQuery.of(context).size.height / 1.43,
+              width: double.infinity,
+              child: Container(
                 width: double.infinity,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
                   child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-                        // color: Colors.red,
-                        // padding:EdgeInsets.only(bottom: 16.0),
-                        child: DataTable(
-                          showCheckboxColumn: true,
-                          border: TableBorder.all(color: Colors.black54,width: 1),
-                          columns: [
-                            DataColumn(label: Center(child: Text('Product Id')),),
-                            DataColumn(label: Center(child: Text('Product Name')),),
-                            DataColumn(label: Center(child: Text('Production Quantit')),),
-                            DataColumn(label: Center(child: Text('Purchased Quantity')),),
-                            DataColumn(label: Center(child: Text('Purchase Returned Quantity')),),
-                            DataColumn(label: Center(child: Text('Damaged Quantity')),),
-                            DataColumn(label: Center(child: Text('Sold Quantity')),),
-                            DataColumn(label: Center(child: Text('Sales Returned Quantity')),),
-                            DataColumn(label: Center(child: Text('Transferred In Quantity')),),
-                            DataColumn(label: Center(child: Text('Transferred Out Quantity')),),
-                            DataColumn(label: Center(child: Text('Current Quantity')),),
-                            DataColumn(label: Center(child: Text('Stock Value')),),
-                          ],
-                          rows: List.generate(
-                            30,
-                                (int index) => DataRow(
-                              cells: <DataCell>[
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-                                DataCell(Center(child: Text('Row $index')),),
-
-                              ],
-                            ),
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      // color: Colors.red,
+                      // padding:EdgeInsets.only(bottom: 16.0),
+                      child: DataTable(
+                        showCheckboxColumn: true,
+                        border:
+                            TableBorder.all(color: Colors.black54, width: 1),
+                        columns: [
+                          DataColumn(
+                            label: Center(child: Text('Product Id')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Product Name')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Production Quantit')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Purchased Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(
+                                child: Text('Purchase Returned Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Damaged Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Sold Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Sales Returned Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Transferred In Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Transferred Out Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Current Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Stock Value')),
+                          ),
+                        ],
+                        rows: List.generate(
+                          30,
+                          (int index) => DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              )
-            else if(data == 'Product Wise Stock')
-                Container(
-                  height: MediaQuery.of(context).size.height/1.43,
-                  width: double.infinity,
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Container(
-                          // color: Colors.red,
-                          // padding:EdgeInsets.only(bottom: 16.0),
-                          child: DataTable(
-                            showCheckboxColumn: true,
-                            border: TableBorder.all(color: Colors.black54,width: 1),
-                            columns: [
-                              DataColumn(label: Center(child: Text('Product Id')),),
-                              DataColumn(label: Center(child: Text('Product Name')),),
-                              DataColumn(label: Center(child: Text('Production Quantit')),),
-                              DataColumn(label: Center(child: Text('Purchased Quantity')),),
-                              DataColumn(label: Center(child: Text('Purchase Returned Quantity')),),
-                              DataColumn(label: Center(child: Text('Damaged Quantity')),),
-                              DataColumn(label: Center(child: Text('Sold Quantity')),),
-                              DataColumn(label: Center(child: Text('Sales Returned Quantity')),),
-                              DataColumn(label: Center(child: Text('Transferred In Quantity')),),
-                              DataColumn(label: Center(child: Text('Transferred Out Quantity')),),
-                              DataColumn(label: Center(child: Text('Current Quantity')),),
-                              DataColumn(label: Center(child: Text('Stock Value')),),
-                            ],
-                            rows: List.generate(
-                              30,
-                                  (int index) => DataRow(
-                                cells: <DataCell>[
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-                                  DataCell(Center(child: Text('Row $index')),),
-
-                                ],
+              ),
+            )
+          else if (data == 'Product Wise Stock')
+            Container(
+              height: MediaQuery.of(context).size.height / 1.43,
+              width: double.infinity,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      // color: Colors.red,
+                      // padding:EdgeInsets.only(bottom: 16.0),
+                      child: DataTable(
+                        showCheckboxColumn: true,
+                        border:
+                            TableBorder.all(color: Colors.black54, width: 1),
+                        columns: [
+                          DataColumn(
+                            label: Center(child: Text('Product Id')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Product Name')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Production Quantit')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Purchased Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(
+                                child: Text('Purchase Returned Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Damaged Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Sold Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Sales Returned Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Transferred In Quantity')),
+                          ),
+                          DataColumn(
+                            label:
+                                Center(child: Text('Transferred Out Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Current Quantity')),
+                          ),
+                          DataColumn(
+                            label: Center(child: Text('Stock Value')),
+                          ),
+                        ],
+                        rows: List.generate(
+                          30,
+                          (int index) => DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Center(child: Text('Row $index')),
                               ),
-                            ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                              DataCell(
+                                Center(child: Text('Row $index')),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                )
+                ),
+              ),
+            )
         ],
       ),
     );
