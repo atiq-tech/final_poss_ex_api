@@ -9,7 +9,6 @@ import 'add_customer.dart';
 
 class SalesEntryPage extends StatefulWidget {
   const SalesEntryPage({super.key});
-
   @override
   State<SalesEntryPage> createState() => _SalesEntryPageState();
 }

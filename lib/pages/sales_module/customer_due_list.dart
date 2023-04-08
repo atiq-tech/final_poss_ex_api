@@ -211,7 +211,7 @@ class _Customer_Due_ListState extends State<Customer_Due_List> {
                           ),
                         ],
                         rows: List.generate(
-                          1,
+                          10,
                           (int index) => DataRow(
                             cells: <DataCell>[
                               DataCell(

@@ -294,7 +294,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
                             ),
                           ],
                           rows: List.generate(
-                            30,
+                            10,
                                 (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(
@@ -351,7 +351,7 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
                             DataColumn(label: Center(child: Text('Stock Value')),),
                           ],
                           rows: List.generate(
-                            30,
+                            10,
                                 (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(Center(child: Text('Row $index')),),
@@ -382,7 +382,6 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
     );
   }
   String? firstPickedDate;
-
   void _firstSelectedDate() async {
     final selectedDate = await showDatePicker(
         context: context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
@@ -394,7 +393,6 @@ class _Customer_Payment_HistoryState extends State<Customer_Payment_History> {
   }
 
   String? secondPickedDate;
-
   void _secondSelectedDate() async {
     final selectedDate = await showDatePicker(
         context: context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));

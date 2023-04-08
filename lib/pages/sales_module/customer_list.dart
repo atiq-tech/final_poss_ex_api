@@ -69,7 +69,7 @@ class _Customer_ListState extends State<Customer_List> {
                         ),
                       ],
                       rows: List.generate(
-                        30,
+                        10,
                         (int index) => DataRow(
                           cells: <DataCell>[
                             DataCell(

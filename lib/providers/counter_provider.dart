@@ -50,7 +50,7 @@ class CounterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Get Suppliers
+  //Get Supplier
   List<AllSuppliersClass> allSupplierslist = [];
   getSupplier(BuildContext context) async {
     allSupplierslist = await ApiAllSuppliers.GetApiAllSuppliers(context);
@@ -83,7 +83,7 @@ class CounterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Products
+  //Product
   List<AllProductsClass> allProductslist = [];
   getProducts(BuildContext context) async {
     allProductslist = await ApiAllProducts.GetApiAllProducts(context);
@@ -117,7 +117,7 @@ class CounterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //ACCOUNTS
+  //ACCOUNT
   List<AllAccountsModelClass> allAccountslist = [];
   getAccounts(BuildContext context) async {
     allAccountslist = await ApiAllAccounts.GetApiAllAccounts(context);

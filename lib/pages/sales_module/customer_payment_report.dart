@@ -295,7 +295,7 @@ class _Customer_Payment_ReportState extends State<Customer_Payment_Report> {
                             ),
                           ],
                           rows: List.generate(
-                            30,
+                            10,
                                 (int index) => DataRow(
                               cells: <DataCell>[
                                 DataCell(
@@ -352,7 +352,7 @@ class _Customer_Payment_ReportState extends State<Customer_Payment_Report> {
                               DataColumn(label: Center(child: Text('Stock Value')),),
                             ],
                             rows: List.generate(
-                              30,
+                              10,
                                   (int index) => DataRow(
                                 cells: <DataCell>[
                                   DataCell(Center(child: Text('Row $index')),),
@@ -383,7 +383,6 @@ class _Customer_Payment_ReportState extends State<Customer_Payment_Report> {
     );
   }
   String? firstPickedDate;
-
   void _firstSelectedDate() async {
     final selectedDate = await showDatePicker(
         context: context, initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime(2050));
