@@ -322,7 +322,6 @@ class _AddSupplierPageState extends State<AddSupplierPage> {
                           height: 35.0,
                           width: 70.0,
                           decoration: BoxDecoration(
-                            // border: Border.all(color: Color.fromARGB(255, 173, 241, 179), width: 2.0),
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(8.0),
                           ),

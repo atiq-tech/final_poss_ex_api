@@ -161,7 +161,7 @@ class _PurchaseEntryPageState extends State<PurchaseEntryPage> {
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
-                                ), // Not necessary for Option 1
+                                ),
                                 value: _selectedSupplier,
                                 onChanged: (newValue) {
                                   setState(() {

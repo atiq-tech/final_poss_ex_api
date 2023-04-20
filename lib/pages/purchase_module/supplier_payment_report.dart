@@ -57,7 +57,7 @@ class _SupplierPaymentReportState extends State<SupplierPaymentReport> {
     secondPickedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     ApiAllSuppliers apiAllSuppliers;
     Provider.of<CounterProvider>(context, listen: false).getSupplier(context);
-    // TODO: implement initState
+   
     super.initState();
   }
 
@@ -71,7 +71,7 @@ class _SupplierPaymentReportState extends State<SupplierPaymentReport> {
     final allSupplierPaymentReportData =
         Provider.of<CounterProvider>(context).allSupplierPaymentReportlist;
     print(
-        "SupplierPaymentReport===SupplierPaymentReport===SupplierPaymentReport=Lenght is:::::${allSupplierPaymentReportData.length}");
+        "SupplierPaymentReport======SupplierPaymentReport=Lenght is:::::${allSupplierPaymentReportData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Supplier Payment Report"),
       body: SingleChildScrollView(
@@ -124,16 +124,14 @@ class _SupplierPaymentReportState extends State<SupplierPaymentReport> {
                                   ),
                                 ),
                                 dropdownColor: Color.fromARGB(255, 231, 251,
-                                    255), // Not necessary for Option 1
+                                    255), 
                                 value: _selectedSupplier,
                                 onChanged: (newValue) {
                                   setState(() {
                                     _selectedSupplier = newValue.toString();
                                     print(
                                         "Supplier Si no ===========>: $newValue");
-                                    // Profit & Loss
-
-                                    //
+                                  
                                   });
                                 },
                                 items: allSuppliersData.map((location) {

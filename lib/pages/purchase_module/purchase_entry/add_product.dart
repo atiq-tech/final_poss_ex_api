@@ -140,7 +140,7 @@ class _ProductEntryState extends State<ProductEntry> {
                                     fontSize: 14,
                                   ),
                                 ),
-                                dropdownColor: Color.fromARGB(255, 231, 251, 255), // Not necessary for Option 1
+                                dropdownColor: Color.fromARGB(255, 231, 251, 255), 
                                 value: _selectedCategory,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -376,7 +376,7 @@ class _ProductEntryState extends State<ProductEntry> {
                                     fontSize: 14,
                                   ),
                                 ),
-                                dropdownColor: Color.fromARGB(255, 231, 251, 255), // Not necessary for Option 1
+                                dropdownColor: Color.fromARGB(255, 231, 251, 255), 
                                 value: _selectedUnit,
                                 onChanged: (newValue) {
                                   setState(() {
@@ -701,10 +701,10 @@ class _ProductEntryState extends State<ProductEntry> {
                           style: TextStyle(color: Color.fromARGB(255, 126, 125, 125)),
                         ),
                         Checkbox(
-                            //only check box
-                            value: check1, //unchecked
+                            
+                            value: check1, 
                             onChanged: (bool? value) {
-                              //value returned when checkbox is clicked
+                              
                               setState(() {
                                 check1 = value;
                               });

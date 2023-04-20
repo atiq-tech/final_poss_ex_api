@@ -80,13 +80,13 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
     final allCustomersData =
         Provider.of<CounterProvider>(context).allCustomerslist;
     print(
-        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=Lenght is:::::${allCustomersData.length}");
+        "CCCCCCCCCCCCCCCCCCCCC=Lenght is:::::${allCustomersData.length}");
     //
     //Profit^& LOSS
     final allProfitLossData =
         Provider.of<CounterProvider>(context).allProfitLosslist;
     print(
-        "plplplplplplplplpplpplplplp=Lenght is:::::${allProfitLossData.length}");
+        "plplplplplplplplpp=Lenght is:::::${allProfitLossData.length}");
     return Scaffold(
       appBar: CustomAppBar(title: "Profit & Loss"),
       
@@ -140,7 +140,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
                                   ),
                                 ),
                                 dropdownColor: Color.fromARGB(255, 231, 251,
-                                    255), // Not necessary for Option 1
+                                    255), 
                                 value: _selectedAccount,
                                 onChanged: (newValue) {
                                   setState(() {

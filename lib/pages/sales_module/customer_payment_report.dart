@@ -352,7 +352,7 @@ class _Customer_Payment_ReportState extends State<Customer_Payment_Report> {
                               DataColumn(label: Center(child: Text('Stock Value')),),
                             ],
                             rows: List.generate(
-                              10,
+                              5,
                                   (int index) => DataRow(
                                 cells: <DataCell>[
                                   DataCell(Center(child: Text('Row $index')),),

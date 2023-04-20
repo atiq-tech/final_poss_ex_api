@@ -89,7 +89,6 @@ class _PurchaseRecordState extends State<PurchaseRecord> {
     return Scaffold(
       appBar: CustomAppBar(title: "Purchase Record"),
       body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),

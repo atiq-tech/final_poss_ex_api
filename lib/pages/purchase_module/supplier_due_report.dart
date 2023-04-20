@@ -205,7 +205,7 @@ class _SupplierDueReportState extends State<SupplierDueReport> {
                                 .getSupplierDue(context, _selectedSupplier);
 
                             print(
-                                "Supplier due repot==Supplier due repot===::${_selectedSupplier}");
+                                "Supplier due repot==Supplier due repot====::${_selectedSupplier}");
                           });
                         },
                         child: Container(
@@ -245,8 +245,6 @@ class _SupplierDueReportState extends State<SupplierDueReport> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        // color: Colors.red,
-                        // padding:EdgeInsets.only(bottom: 16.0),
                         child: DataTable(
                           showCheckboxColumn: true,
                           border:
