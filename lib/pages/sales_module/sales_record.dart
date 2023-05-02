@@ -506,7 +506,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
                                 ),
                               )
                             ],
-                          ), // Employee
+                          ),
                           Row(
                             children: [
                               Expanded(
@@ -539,7 +539,7 @@ class _SalesRecordPageState extends State<SalesRecordPage> {
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
-                                        ), // Not necessary for Option 1
+                                        ), 
                                         value: _selectedRecordTypes,
                                         onChanged: (newValue) {
                                           setState(() {

@@ -474,8 +474,7 @@ class _CashTransactionPageState extends State<CashTransactionPage> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Container(
-                        // color: Colors.red,
-                        // padding:EdgeInsets.only(bottom: 16.0),
+                    
                         child: DataTable(
                           showCheckboxColumn: true,
                           border:

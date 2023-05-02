@@ -65,5 +65,4 @@ class _Custom_Navigation_BarPageState extends State<Custom_Navigation_BarPage> {
       ),
     );
   }
-
 }

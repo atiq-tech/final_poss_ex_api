@@ -681,9 +681,7 @@ class _HomePageState extends State<HomePage> {
     BankTransactionReportPage(),
     CashStatementPage(),
   ];
-  //
 
-//
   List Administator = [
     {"name": "Product Entry", "image": "all_picture/production_entry.png"},
     {"name": "Product Ledger", "image": "all_picture/production_record.png"},
@@ -720,7 +718,7 @@ class _HomePageState extends State<HomePage> {
     SupplierPaymentReport(),
   ];
   //Report Module
-  //
+
   List reportModule = [
     {"name": "Profit & Loss", "image": "all_picture/paal.png"},
   ];

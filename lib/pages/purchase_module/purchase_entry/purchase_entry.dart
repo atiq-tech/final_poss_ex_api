@@ -292,7 +292,7 @@ class _PurchaseEntryPageState extends State<PurchaseEntryPage> {
                           ),
                         ),
                       ],
-                    ), // mobile
+                    ), 
                     Row(
                       children: [
                         Expanded(
@@ -333,7 +333,7 @@ class _PurchaseEntryPageState extends State<PurchaseEntryPage> {
                         ),
                       ],
                     ),
-                    //address
+                    
                   ],
                 ),
               ),
@@ -381,7 +381,7 @@ class _PurchaseEntryPageState extends State<PurchaseEntryPage> {
                                   style: TextStyle(
                                     fontSize: 14,
                                   ),
-                                ), // Not necessary for Option 1
+                                ), 
                                 value: _selectedCategory,
                                 onChanged: (newValue) {
                                   setState(() {

@@ -81,7 +81,7 @@ class _ProfitLossReportPageState extends State<ProfitLossReportPage> {
         Provider.of<CounterProvider>(context).allCustomerslist;
     print(
         "CCCCCCCCCCCCCCCCCCCCC=Lenght is:::::${allCustomersData.length}");
-    //
+    
     //Profit^& LOSS
     final allProfitLossData =
         Provider.of<CounterProvider>(context).allProfitLosslist;
